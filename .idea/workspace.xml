@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1d10598f-d2d1-41c6-8956-9cb4409a310c" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="1500" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Maximiano-Andrade/app-englishzinho.git&quot;,
+    &quot;accountId&quot;: &quot;7ea31d32-67b8-41ec-b40c-195cd87ba0d1&quot;
+  }
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0000510907693374" />
+      <entry key="MS500" value="1.2330013868600427" />
+      <entry key="S2" value="3.3149641657869573" />
+      <entry key="S5" value="6.982504312569914" />
+      <entry key="S10" value="11.508861535967513" />
+      <entry key="S30" value="19.271790254650057" />
+      <entry key="S60" value="23.443492426055013" />
+      <entry key="M2" value="30.91843245462765" />
+      <entry key="M5" value="60.68234249193905" />
+      <entry key="M10" value="103.21210497815377" />
+      <entry key="M15" value="135.84485604911276" />
+      <entry key="M30" value="201.05136248844917" />
+      <entry key="H1" value="277.0683029721995" />
+      <entry key="H2" value="389.4296672299358" />
+      <entry key="H4" value="550.223881305413" />
+      <entry key="D1" value="875.1635758435283" />
+      <entry key="W1" value="966.3403209354182" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="5.93637735929673E-156" />
+      <entry key="S10" value="2.436530480510001E-78" />
+      <entry key="S30" value="1.4100159258593772E-26" />
+      <entry key="S60" value="1.6131183376820498E-13" />
+      <entry key="M2" value="8.254543991762453E-7" />
+      <entry key="M5" value="0.01274268261823784" />
+      <entry key="M10" value="0.3588650176394011" />
+      <entry key="M15" value="1.1270139214501946" />
+      <entry key="M30" value="3.825774323554322" />
+      <entry key="H1" value="9.069755670400713" />
+      <entry key="H2" value="19.94212811048228" />
+      <entry key="H4" value="35.76534553968927" />
+      <entry key="D1" value="65.56452137009231" />
+      <entry key="W1" value="73.55356782197728" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9659836876382886" />
+      <entry key="MS500" value="1.2232983014140886" />
+      <entry key="S2" value="3.3059667888596755" />
+      <entry key="S5" value="6.9735848087792665" />
+      <entry key="S10" value="11.50024311810518" />
+      <entry key="S30" value="19.26616136530987" />
+      <entry key="S60" value="23.43996865507013" />
+      <entry key="M2" value="30.916135848487702" />
+      <entry key="M5" value="60.693132561337165" />
+      <entry key="M10" value="103.56634770663533" />
+      <entry key="M15" value="136.96388856947215" />
+      <entry key="M30" value="204.86473072742635" />
+      <entry key="H1" value="286.12422369319665" />
+      <entry key="H2" value="409.357563123444" />
+      <entry key="H4" value="585.9768488444976" />
+      <entry key="D1" value="940.7243435263566" />
+      <entry key="W1" value="1039.8932864426743" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3IvA1Umqfi4mIUbd7SQiIeP3pkD" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "List",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/maxim/Downloads/englishzinho",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "python.packages.toolwindow.project.migrated.to.right.top.v2": "true",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\maxim\\Downloads\\englishzinho\\frontend\\my-app\\node_modules\\typescript\\lib"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-eff1e8def5f5-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.10315.174" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1d10598f-d2d1-41c6-8956-9cb4409a310c" name="Changes" comment="" />
+      <created>1788634453765</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1788634453765</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
