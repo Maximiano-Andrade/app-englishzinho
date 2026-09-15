@@ -4,7 +4,6 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import SegudaryButton from "../../componets/SegudaryButton";
 import { router, Link } from "expo-router";
 
-
 export default function Login() {
 
   const insets = useSafeAreaInsets();
@@ -40,7 +39,7 @@ export default function Login() {
       </View>
 
       <View style={styles.footerView}>
-        <Text style={styles.footerText}>Não tem uma conta? <Link href="/register" style={styles.footerTextLink}>Registre-se</Link></Text>
+        <Text style={styles.footerText}>Não tem uma conta? <Link href='/register' style={styles.footerTextLink}>Registre-se</Link></Text>
       </View>
     </SafeAreaView>
   );

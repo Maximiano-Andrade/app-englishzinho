@@ -42,7 +42,8 @@ export default function Layout() {
             }} />
 
             <Tabs.Screen name="creater" options={{
-                title: 'creater',
+                title: 'Cria',
+                headerTitle: 'Cria atividade',
                 tabBarIcon: ({ color, focused }) => (
                     <Ionicons name={focused ? 'add' : 'add-outline'} color={color} size={24} />
                 ),

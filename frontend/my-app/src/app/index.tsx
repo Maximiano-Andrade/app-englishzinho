@@ -43,6 +43,4 @@ const styles = StyleSheet.create({
     color: '#2563EB',
     marginBottom: 180,
   },
-
-
 });
