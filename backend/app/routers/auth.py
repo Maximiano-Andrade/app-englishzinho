@@ -4,7 +4,6 @@ from fastapi import Depends, HTTPException, status, APIRouter
 from app.schemas.schemas import LoginResponse
 from sqlalchemy.orm import Session
 
-
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=LoginResponse)

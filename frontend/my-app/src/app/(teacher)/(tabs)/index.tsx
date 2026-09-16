@@ -86,7 +86,7 @@ export default function User() {
     ];
 
     const formatIconName = (name: any) => {
-        if (!name) return 'question'; // Ícone padrão de fallback
+        if (!name) return 'question';
         return name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
     };
     return (
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     },
 
     atividadeCriadasText: {
-        fontFamily: 'Inter_500Semibold',
+        fontFamily: 'Inter_600SemiBold',
         color: '#374151',
         fontSize: 15,
     },

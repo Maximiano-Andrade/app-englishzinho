@@ -20,6 +20,7 @@ export default function Layout() {
     Inter_700Bold,
     Inter_500Medium,
     Inter_300Light,
+    Inter_200ExtraLight,
   });
 
   // Aguarda carregar a fonte antes de renderizar
