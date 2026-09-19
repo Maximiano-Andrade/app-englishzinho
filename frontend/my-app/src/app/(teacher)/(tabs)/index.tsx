@@ -5,7 +5,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function User() {
     const router = useRouter();
-
     const atividades = [
         {
             id: '1',
@@ -27,7 +26,6 @@ export default function User() {
             completed: '0/0 completo',
             icon: "audio",
         },
-
         {
             id: '3',
             title: 'Vocabulario basico Escuta',
@@ -46,7 +44,6 @@ export default function User() {
             level: 'Iniciante',
             date: '12/02/2025',
             description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-
             completed: '0/0 completo',
             icon: "bars",
         },
@@ -61,7 +58,6 @@ export default function User() {
             completed: '0/0 completo',
             icon: "sound",
         },
-
         {
             id: '6',
             title: 'Pratica Pronuncia Fala',
@@ -89,8 +85,8 @@ export default function User() {
         if (!name) return 'question';
         return name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
     };
-    return (
 
+    return (
         <View style={styles.container}>
             <View style={styles.ViewContainter}>
 
@@ -141,10 +137,8 @@ export default function User() {
                 </View>
             </View>
         </View>
-
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

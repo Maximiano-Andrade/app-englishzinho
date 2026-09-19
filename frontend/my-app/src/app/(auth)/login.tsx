@@ -34,7 +34,7 @@ export default function Login() {
             </View>
 
           </View>
-          <SegudaryButton onPress={() => router.push('/(teacher)/(tabs)')} />
+          <SegudaryButton onPress={() => router.push('/(student)/(tabs)')} />
         </View>
       </View>
 

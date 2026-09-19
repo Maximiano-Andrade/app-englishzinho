@@ -10,8 +10,6 @@ import {
     Inter_200ExtraLight,
 } from '@expo-google-fonts/inter';
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-
-
 export default function Layout() {
   const [loaded] = useFonts({
     Inter_800ExtraBold,

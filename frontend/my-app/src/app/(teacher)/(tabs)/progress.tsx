@@ -1,7 +1,6 @@
 import {StyleSheet, Text, View, ScrollView} from "react-native";
 
 export default function Progress() {
-
     const alunos = [
         {
             id: 1,
@@ -53,7 +52,7 @@ export default function Progress() {
 
     ]
 
-    function handCor(nivel) {
+    function handCor(nivel:any) {
         if (nivel === 'Intermediário') {
             return '#2563EB'
         } else if (nivel === 'Iniciante') {
@@ -120,7 +119,6 @@ export default function Progress() {
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
