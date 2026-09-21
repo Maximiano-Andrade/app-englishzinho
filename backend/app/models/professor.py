@@ -2,7 +2,6 @@ from app.database.database import Base
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-
 class Professor(Base):
     __tablename__ = "professor"
 

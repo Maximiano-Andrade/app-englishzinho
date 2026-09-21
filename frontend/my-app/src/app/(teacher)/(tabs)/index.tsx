@@ -5,6 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function User() {
     const router = useRouter();
+
     const atividades = [
         {
             id: '1',

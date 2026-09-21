@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useState} from 'react';
 import {Alert, Pressable, ScrollView, StyleSheet, Text, View,} from 'react-native';
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from '@expo/vector-icons/Feather';
@@ -29,7 +29,7 @@ type Props = {
 };
 
 const demoActivity: ActivityData = {
-    title: 'Vocabulario basico Quiz',
+    title: 'Vocabulário basico Quiz',
     description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
     type: 'Quiz',
     level: 'Iniciante',
@@ -201,8 +201,8 @@ function Tag({label}: { label: string }) {
         <View style={styles.tag}>
             <Text style={styles.tagText}>{label}</Text>
         </View>
-    )
-};
+    );
+}
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
@@ -373,5 +373,9 @@ const styles = StyleSheet.create({
     },
     buttonHidden: {
         opacity: 0,
+    },
+    empty:{
+        padding: 15,
+        textAlign: 'center',
     }
 })
