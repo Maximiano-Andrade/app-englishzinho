@@ -1,17 +1,37 @@
 import {View, Text, StyleSheet, TextInput} from 'react-native'
 import PrimaryButton from '../../../componets/PrimaryButton'
-import { useRouter, useLocalSearchParams} from 'expo-router'
+import {useRouter, useLocalSearchParams} from 'expo-router'
+import {useState} from "react";
+import { Alert } from 'react-native';
 
 export default function Who() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
+    const {email, senha, tipoUsuario} = useLocalSearchParams<{
+        email: string;
+        senha: string;
+        tipoUsuario: 'aluno' | 'professor';
+    }>();
+
     const handleNext = () => {
+        if (!nome.trim()) {
+            Alert.alert('Atenção', 'Digite seu nome.');
+            return;
+        }
+
         router.push({
             pathname: '/(auth)/register/school',
-            params: {isTeacher: params.isTeacher} // Repassa o valor recebido
+            params: {
+                email,
+                senha,
+                tipoUsuario,
+                nome,
+            },
         });
     };
+
+    const [nome, setNome] = useState('');
 
     return (
         <View style={styles.container}>
@@ -21,7 +41,8 @@ export default function Who() {
                         <Text style={styles.ViewTitle}>Quem é você</Text>
                     </View>
 
-                    <TextInput style={styles.TextInput} placeholder="Digiter seu nome"/>
+                    <TextInput style={styles.TextInput} placeholder="Digiter seu nome" value={nome}
+                               onChangeText={setNome}/>
                 </View>
 
 

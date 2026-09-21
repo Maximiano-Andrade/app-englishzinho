@@ -1,11 +1,47 @@
-import {Text, View, StyleSheet, TextInput} from "react-native";
+import {Text, View, StyleSheet, TextInput, Alert} from "react-native";
+import {fazerLogin} from '../../services/api';
+import {useState} from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
 import SegudaryButton from "../../componets/SegudaryButton";
 import {router, Link} from "expo-router";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 export default function Login() {
     const insets = useSafeAreaInsets();
+
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+
+    async function entrar() {
+        if (!email.trim() || !senha.trim()) {
+            Alert.alert('Atenção', 'Preencha e-mail e senha.');
+            return;
+        }
+
+        try {
+            const usuario = await fazerLogin(email, senha);
+
+            await AsyncStorage.setItem('@usuario', JSON.stringify(usuario));
+
+            if (usuario.tipo_usuario === 'ALUNO') {
+                router.replace('/(student)/(tabs)');
+            } else if (usuario.tipo_usuario === 'PROFESSOR') {
+                router.replace('/(teacher)/(tabs)');
+            } else {
+                Alert.alert('Erro', 'Tipo de usuário não reconhecido.');
+            }
+        } catch (error) {
+            Alert.alert(
+                'Erro ao entrar',
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível conectar à API.'
+            );
+        }
+    }
 
     return (
 
@@ -24,21 +60,35 @@ export default function Login() {
                         <View style={styles.inputsView}>
                             <View style={styles.inputView}>
                                 <AntDesign name="mail" size={24} color="black"/>
-                                <TextInput style={styles.input} placeholder="email" autoFocus={true}/>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="E-mail"
+                                    autoFocus
+                                    autoCapitalize="none"
+                                    keyboardType="email-address"
+                                    value={email}
+                                    onChangeText={setEmail}
+                                />
                             </View>
                             <View style={styles.inputView}>
                                 <AntDesign name="lock" size={24} color="black"/>
-                                <TextInput style={styles.input} placeholder="senha"/>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Senha"
+                                    secureTextEntry
+                                    value={senha}
+                                    onChangeText={setSenha}
+                                />
                             </View>
                         </View>
 
                     </View>
-                    <SegudaryButton onPress={() => router.push('/(student)/(tabs)')}/>
+                    <SegudaryButton onPress={entrar}/>
                 </View>
             </View>
 
             <View style={styles.footerView}>
-                <Text style={styles.footerText}>Não tem uma conta? <Link href='/register'
+                <Text style={styles.footerText}>Não tem uma conta? <Link href='/(auth)/register'
                                                                          style={styles.footerTextLink}>Registre-se</Link></Text>
             </View>
         </SafeAreaView>

@@ -3,18 +3,50 @@ import {Pressable, TouchableOpacity, Image, StyleSheet, Text} from "react-native
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function Layout() {
 
-    const ProfileAvatar = () => (
-        <TouchableOpacity onPress={() => router.push('/login')}
-                          style={styles.headerContainer}>
-            <Text style={styles.userName}>Hello! teacher Julia</Text>
-            <Image
-                source={{uri: 'https://img.magnific.com/fotos-gratis/mulher-sorridente-a-ensinar_23-2149272223.jpg?semt=ais_hybrid&w=740&q=80'}}
-                style={styles.avatar}
-            />
-        </TouchableOpacity>
-    );
+    const [usuario, setUsuario] = useState<{
+        nome: string;
+        foto_perfil?: string;
+    } | null>(null);
+
+
+    useEffect(() => {
+        async function carregarUsuario() {
+            const dados = await AsyncStorage.getItem('@usuario');
+
+            if (dados) {
+                setUsuario(JSON.parse(dados));
+            }
+        }
+
+        carregarUsuario();
+    }, []);
+
+    const ProfileAvatar = () => {
+        const primeiroNome = usuario?.nome?.split(' ')[0] || 'Professor';
+
+        return (
+            <TouchableOpacity
+                onPress={() => router.push('/login')}
+                style={styles.headerContainer}
+            >
+                <Text style={styles.userName}>Olá, {primeiroNome}</Text>
+
+                <Image
+                    source={{
+                        uri:
+                            usuario?.foto_perfil ||
+                            'https://pixabay.com/pt/images/download/whitesession-woman-2112292_1920.jpg',
+                    }}
+                    style={styles.avatar}
+                />
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <Tabs screenOptions={{

@@ -1,46 +1,65 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    View,
-    Text,
+    Alert,
+    ScrollView,
     StyleSheet,
+    Text,
     TextInput,
     TouchableOpacity,
-    ScrollView,
+    View,
 } from 'react-native';
-import {Checkbox, Host} from "@expo/ui/jetpack-compose";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Checkbox, Host} from '@expo/ui/jetpack-compose';
 
-// --- TIPAGEM DOS DADOS ---
-export interface Answer {
+import {criarAtividade} from '../../../services/api';
+
+
+type TipoAtividade = 'Quiz' | 'Escuta' | 'Fala';
+type NivelAtividade = 'Iniciante' | 'Intermediário' | 'Avançado';
+
+type Answer = {
     id: string;
     text: string;
     correct: boolean;
-}
-export interface Question {
+};
+
+type Question = {
     id: string;
     text: string;
     answers: Answer[];
-}
-export interface ActivityData {
+};
+
+type ActivityData = {
     title: string;
     description: string;
-    type: string;
-    level: string;
+    type: TipoAtividade;
+    level: NivelAtividade | '';
     questions: Question[];
-}
+};
 
-const opcoesLevel = [
+type UsuarioSalvo = {
+    id_usuario: number;
+    id_professor: number | null;
+    nome: string;
+    tipo_usuario: 'ALUNO' | 'PROFESSOR';
+};
+
+const opcoesLevel: { id: NivelAtividade; label: NivelAtividade }[] = [
     {id: 'Iniciante', label: 'Iniciante'},
     {id: 'Intermediário', label: 'Intermediário'},
     {id: 'Avançado', label: 'Avançado'},
 ];
-const opcoesType = [
+
+const opcoesType: { id: TipoAtividade; label: TipoAtividade }[] = [
     {id: 'Quiz', label: 'Quiz'},
     {id: 'Escuta', label: 'Escuta'},
     {id: 'Fala', label: 'Fala'},
 ];
 
+
 export default function Creater() {
-    const [currentStep, setCurrentStep] = useState<number>(1);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [professorId, setProfessorId] = useState<number | null>(null);
 
     const [formData, setFormData] = useState<ActivityData>({
         title: '',
@@ -50,18 +69,115 @@ export default function Creater() {
         questions: [],
     });
 
-    const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 3));
-    const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+    useEffect(() => {
+        async function carregarProfessor() {
+            const dados = await AsyncStorage.getItem('@usuario');
+
+            if (!dados) {
+                return;
+            }
+
+            const usuario: UsuarioSalvo = JSON.parse(dados);
+
+            if (usuario.tipo_usuario === 'PROFESSOR') {
+                setProfessorId(usuario.id_professor);
+            }
+        }
+
+        carregarProfessor();
+    }, []);
+
+    function nextStep() {
+        setCurrentStep((prev) => Math.min(prev + 1, 3));
+    }
+
+    function prevStep() {
+        setCurrentStep((prev) => Math.max(prev - 1, 1));
+    }
+
+    async function salvarAtividade() {
+        if (!professorId) {
+            Alert.alert(
+                'Erro',
+                'Não foi possível identificar o professor logado.',
+            );
+            return;
+        }
+
+        if (
+            !formData.title.trim() ||
+            !formData.description.trim() ||
+            !formData.level
+        ) {
+            Alert.alert('Atenção', 'Preencha todos os campos da atividade.');
+            return;
+        }
+
+        if (formData.questions.length === 0) {
+            Alert.alert('Atenção', 'Adicione pelo menos uma pergunta.');
+            return;
+        }
+
+        const existePerguntaInvalida = formData.questions.some(
+            (question) =>
+                !question.text.trim() ||
+                question.answers.some((answer) => !answer.text.trim()) ||
+                !question.answers.some((answer) => answer.correct),
+        );
+
+        if (existePerguntaInvalida) {
+            Alert.alert(
+                'Atenção',
+                'Preencha perguntas e respostas, e marque uma resposta correta.',
+            );
+            return;
+        }
+
+        try {
+            await criarAtividade({
+                professor_id: professorId,
+                title: formData.title.trim(),
+                description: formData.description.trim(),
+                type: formData.type,
+                level: formData.level as NivelAtividade,
+                questions: formData.questions.map((question) => ({
+                    text: question.text.trim(),
+                    answers: question.answers.map((answer) => ({
+                        text: answer.text.trim(),
+                        correct: answer.correct,
+                    })),
+                })),
+            });
+
+            Alert.alert('Sucesso', 'Atividade criada com sucesso.');
+
+            setFormData({
+                title: '',
+                description: '',
+                type: 'Quiz',
+                level: '',
+                questions: [],
+            });
+
+            setCurrentStep(1);
+        } catch (error) {
+            Alert.alert(
+                'Erro ao salvar',
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível criar a atividade.',
+            );
+        }
+    }
 
     return (
         <View style={styles.container}>
-            {/* Header com os Passos */}
             <View style={styles.stepperContainer}>
-                <StepIndicator step={1} currentStep={currentStep} label="Info Básico"/>
+                <StepIndicator step={1} currentStep={currentStep} label="Informação"/>
                 <View style={styles.line}/>
-                <StepIndicator step={2} currentStep={currentStep} label="Questão"/>
+                <StepIndicator step={2} currentStep={currentStep} label="Perguntas"/>
                 <View style={styles.line}/>
-                <StepIndicator step={3} currentStep={currentStep} label="Preview"/>
+                <StepIndicator step={3} currentStep={currentStep} label="Resumo"/>
             </View>
 
             <ScrollView contentContainerStyle={styles.content}>
@@ -77,8 +193,8 @@ export default function Creater() {
                     <StepQuestions
                         formData={formData}
                         setFormData={setFormData}
-                        onNext={nextStep}
                         onBack={prevStep}
+                        onNext={nextStep}
                     />
                 )}
 
@@ -86,7 +202,7 @@ export default function Creater() {
                     <StepPreview
                         formData={formData}
                         onBack={prevStep}
-                        onSave={() => console.log('Salvar Atividade:', JSON.stringify(formData, null, 2))}
+                        onSave={salvarAtividade}
                     />
                 )}
             </ScrollView>
@@ -94,36 +210,62 @@ export default function Creater() {
     );
 }
 
-// --- SUB-COMPONENTES ---
-function StepIndicator({step, currentStep, label}: { step: number; currentStep: number; label: string }) {
-    const isActive = currentStep === step;
-    const isDone = currentStep > step;
+
+function StepIndicator({
+                           step,
+                           currentStep,
+                           label,
+                       }: {
+    step: number;
+    currentStep: number;
+    label: string;
+}) {
+    const ativo = currentStep === step;
+    const concluido = currentStep > step;
 
     return (
         <View style={styles.stepItem}>
-            <View style={[styles.badge, isActive && styles.badgeActive, isDone && styles.badgeDone]}>
-                <Text style={[styles.badgeText, (isActive || isDone) && styles.badgeTextActive]}>{step}</Text>
+            <View
+                style={[
+                    styles.badge,
+                    ativo && styles.badgeActive,
+                    concluido && styles.badgeActive,
+                ]}
+            >
+                <Text style={[styles.badgeText, (ativo || concluido) && styles.badgeTextActive]}>
+                    {step}
+                </Text>
             </View>
+
             <Text style={styles.stepLabel}>{label}</Text>
         </View>
     );
 }
 
-// Passo 1: Informações Básicas
-function StepBasicInfo({formData, setFormData, onNext}: any) {
+
+function StepBasicInfo({
+                           formData,
+                           setFormData,
+                           onNext,
+                       }: {
+    formData: ActivityData;
+    setFormData: React.Dispatch<React.SetStateAction<ActivityData>>;
+    onNext: () => void;
+}) {
     return (
         <View style={styles.card}>
-            <Text style={styles.cardTitle}>Informação</Text>
+            <Text style={styles.cardTitle}>Informações da atividade</Text>
 
-            <Text style={styles.label}>Título da Atividade*</Text>
+            <Text style={styles.label}>Título *</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Gramática"
+                placeholder="Ex.: Cores em inglês"
                 value={formData.title}
-                onChangeText={(text) => setFormData({...formData, title: text})}
+                onChangeText={(title) => setFormData({...formData, title})}
             />
 
-            <Text style={styles.label}>Level da atividade*</Text>
+            <Text style={styles.label}>Nível *</Text>
+
             {opcoesLevel.map((opcao) => (
                 <View key={opcao.id} style={styles.checkboxRow}>
                     <Host matchContents>
@@ -135,39 +277,55 @@ function StepBasicInfo({formData, setFormData, onNext}: any) {
                                     level: checked ? opcao.id : '',
                                 })
                             }
-                            colors={{checkedColor: '#2563EB', checkmarkColor: '#FFF'}}
+                            colors={{
+                                checkedColor: '#2563EB',
+                                checkmarkColor: '#FFFFFF',
+                            }}
                         />
                     </Host>
+
                     <Text style={styles.optionLabel}>{opcao.label}</Text>
                 </View>
             ))}
 
-            <Text style={styles.label}>Tipo da atividade*</Text>
+            <Text style={styles.label}>Tipo *</Text>
+
             {opcoesType.map((opcao) => (
                 <View key={opcao.id} style={styles.checkboxRow}>
                     <Host matchContents>
                         <Checkbox
                             value={formData.type === opcao.id}
-                            onCheckedChange={(checked) =>
-                                setFormData({
-                                    ...formData,
-                                    type: checked ? opcao.id : '',
-                                })
-                            }
-                            colors={{checkedColor: '#2563EB', checkmarkColor: '#FFF'}}
+                            onCheckedChange={(checked) => {
+                                if (checked) {
+                                    setFormData({
+                                        ...formData,
+                                        type: opcao.id,
+                                    });
+                                }
+                            }}
+                            colors={{
+                                checkedColor: '#2563EB',
+                                checkmarkColor: '#FFFFFF',
+                            }}
                         />
                     </Host>
+
                     <Text style={styles.optionLabel}>{opcao.label}</Text>
                 </View>
             ))}
 
-            <Text style={styles.label}>Descrição*</Text>
+            <Text style={styles.label}>Descrição *</Text>
             <TextInput
                 style={[styles.input, styles.textArea]}
                 multiline
-                placeholder="Descreva sua atividade"
+                placeholder="Descreva a atividade"
                 value={formData.description}
-                onChangeText={(text) => setFormData({...formData, description: text})}
+                onChangeText={(description) =>
+                    setFormData({
+                        ...formData,
+                        description,
+                    })
+                }
             />
 
             <TouchableOpacity style={styles.btnPrimary} onPress={onNext}>
@@ -177,163 +335,218 @@ function StepBasicInfo({formData, setFormData, onNext}: any) {
     );
 }
 
-// Passo 2: Gerenciamento de Questões e Opções
-function StepQuestions({formData, setFormData, onNext, onBack}: any) {
 
-    // Criar nova pergunta com 3 respostas padrão
-    const addQuestion = () => {
-        const newQuestion: Question = {
-            id: Date.now().toString(),
-            text: '',
-            answers: [
-                {id: Date.now().toString() + '-1', text: '', correct: true},
-                {id: Date.now().toString() + '-2', text: '', correct: false},
-                {id: Date.now().toString() + '-3', text: '', correct: false},
-            ],
-        };
+function StepQuestions({
+                           formData,
+                           setFormData,
+                           onBack,
+                           onNext,
+                       }: {
+    formData: ActivityData;
+    setFormData: React.Dispatch<React.SetStateAction<ActivityData>>;
+    onBack: () => void;
+    onNext: () => void;
+}) {
+    function addQuestion() {
+        const baseId = Date.now().toString();
+
         setFormData({
             ...formData,
-            questions: [...formData.questions, newQuestion],
-        });
-    };
-
-    const updateQuestionText = (index: number, text: string) => {
-        const updated = formData.questions.map((q: Question, i: number) =>
-            i === index ? {...q, text} : q
-        );
-        setFormData({...formData, questions: updated});
-    };
-
-    // Adicionar uma nova opção dinâmica
-    const addOption = (qIndex: number) => {
-        const updated = formData.questions.map((q: Question, i: number) => {
-            if (i === qIndex) {
-                const newAnswer: Answer = {
-                    id: Date.now().toString(),
+            questions: [
+                ...formData.questions,
+                {
+                    id: baseId,
                     text: '',
-                    correct: false,
-                };
-                return {...q, answers: [...q.answers, newAnswer]};
-            }
-            return q;
+                    answers: [
+                        {id: `${baseId}-1`, text: '', correct: true},
+                        {id: `${baseId}-2`, text: '', correct: false},
+                        {id: `${baseId}-3`, text: '', correct: false},
+                    ],
+                },
+            ],
         });
-        setFormData({...formData, questions: updated});
-    };
+    }
 
-    // Remover uma opção dinâmica (mantém pelo menos 2)
-    const removeOption = (qIndex: number, ansIndex: number) => {
-        const updated = formData.questions.map((q: Question, i: number) => {
-            if (i === qIndex) {
-                if (q.answers.length <= 2) return q; // Garante mínimo de 2 opções
+    function removeQuestion(questionIndex: number) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.filter(
+                (_, index) => index !== questionIndex,
+            ),
+        });
+    }
 
-                const filteredAnswers = q.answers.filter((_, j) => j !== ansIndex);
+    function updateQuestion(questionIndex: number, text: string) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.map((question, index) =>
+                index === questionIndex ? {...question, text} : question,
+            ),
+        });
+    }
 
-                // Garante que haja pelo menos uma correta se a deletada era a correta
-                const wasCorrect = q.answers[ansIndex]?.correct;
-                if (wasCorrect && filteredAnswers.length > 0) {
-                    filteredAnswers[0].correct = true;
+    function addAnswer(questionIndex: number) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.map((question, index) => {
+                if (index !== questionIndex) {
+                    return question;
                 }
 
-                return {...q, answers: filteredAnswers};
-            }
-            return q;
+                return {
+                    ...question,
+                    answers: [
+                        ...question.answers,
+                        {
+                            id: Date.now().toString(),
+                            text: '',
+                            correct: false,
+                        },
+                    ],
+                };
+            }),
         });
-        setFormData({...formData, questions: updated});
-    };
+    }
 
-    const updateAnswerText = (qIndex: number, ansIndex: number, text: string) => {
-        const updated = formData.questions.map((q: Question, i: number) => {
-            if (i === qIndex) {
-                const newAnswers = q.answers.map((ans, j) =>
-                    j === ansIndex ? {...ans, text} : ans
+    function updateAnswer(
+        questionIndex: number,
+        answerIndex: number,
+        text: string,
+    ) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.map((question, index) => {
+                if (index !== questionIndex) {
+                    return question;
+                }
+
+                return {
+                    ...question,
+                    answers: question.answers.map((answer, answerPosition) =>
+                        answerPosition === answerIndex
+                            ? {...answer, text}
+                            : answer,
+                    ),
+                };
+            }),
+        });
+    }
+
+    function setCorrectAnswer(questionIndex: number, answerIndex: number) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.map((question, index) => {
+                if (index !== questionIndex) {
+                    return question;
+                }
+
+                return {
+                    ...question,
+                    answers: question.answers.map((answer, answerPosition) => ({
+                        ...answer,
+                        correct: answerPosition === answerIndex,
+                    })),
+                };
+            }),
+        });
+    }
+
+    function removeAnswer(questionIndex: number, answerIndex: number) {
+        setFormData({
+            ...formData,
+            questions: formData.questions.map((question, index) => {
+                if (index !== questionIndex || question.answers.length <= 2) {
+                    return question;
+                }
+
+                const answers = question.answers.filter(
+                    (_, position) => position !== answerIndex,
                 );
-                return {...q, answers: newAnswers};
-            }
-            return q;
-        });
-        setFormData({...formData, questions: updated});
-    };
 
-    const setCorrectAnswer = (qIndex: number, ansIndex: number) => {
-        const updated = formData.questions.map((q: Question, i: number) => {
-            if (i === qIndex) {
-                const newAnswers = q.answers.map((ans, j) => ({
-                    ...ans,
-                    correct: j === ansIndex,
-                }));
-                return {...q, answers: newAnswers};
-            }
-            return q;
-        });
-        setFormData({...formData, questions: updated});
-    };
+                if (!answers.some((answer) => answer.correct)) {
+                    answers[0].correct = true;
+                }
 
-    const removeQuestion = (index: number) => {
-        const updated = formData.questions.filter((_: any, i: number) => i !== index);
-        setFormData({...formData, questions: updated});
-    };
+                return {
+                    ...question,
+                    answers,
+                };
+            }),
+        });
+    }
 
     return (
         <View style={styles.card}>
             <View style={styles.headerRow}>
-                <Text style={styles.cardTitle}>Perguntas ({formData.questions.length})</Text>
+                <Text style={styles.cardTitle}>
+                    Perguntas ({formData.questions.length})
+                </Text>
+
                 <TouchableOpacity style={styles.btnAdd} onPress={addQuestion}>
-                    <Text style={styles.btnAddText}>+ Adicionar Pergunta</Text>
+                    <Text style={styles.btnAddText}>+ Pergunta</Text>
                 </TouchableOpacity>
             </View>
 
             {formData.questions.length === 0 ? (
-                <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>Sem Pergunta adicionada</Text>
-                    <Text style={styles.emptySubtext}>Clique em "Adicionar Pergunta" para começar</Text>
-                </View>
+                <Text style={styles.emptyText}>
+                    Nenhuma pergunta adicionada.
+                </Text>
             ) : (
-                formData.questions.map((q: Question, qIndex: number) => (
-                    <View key={q.id} style={styles.questionCard}>
+                formData.questions.map((question, questionIndex) => (
+                    <View key={question.id} style={styles.questionCard}>
                         <View style={styles.questionHeader}>
-                            <Text style={styles.questionTitle}>Pergunta {qIndex + 1}</Text>
-                            <TouchableOpacity onPress={() => removeQuestion(qIndex)}>
+                            <Text style={styles.questionTitle}>
+                                Pergunta {questionIndex + 1}
+                            </Text>
+
+                            <TouchableOpacity onPress={() => removeQuestion(questionIndex)}>
                                 <Text style={styles.btnRemoveText}>Excluir</Text>
                             </TouchableOpacity>
                         </View>
 
                         <TextInput
                             style={styles.input}
-                            placeholder="Texto da Pergunta *"
-                            value={q.text}
-                            onChangeText={(text) => updateQuestionText(qIndex, text)}
+                            placeholder="Texto da pergunta"
+                            value={question.text}
+                            onChangeText={(text) => updateQuestion(questionIndex, text)}
                         />
 
-                        {/* Cabeçalho do Bloco de Opções */}
-                        <View style={styles.optionHeaderRow}>
-                            <Text style={styles.sectionLabel}>Opções de Resposta (marque a correta):</Text>
-                            <TouchableOpacity onPress={() => addOption(qIndex)}>
+                        <View style={styles.optionHeader}>
+                            <Text style={styles.sectionLabel}>Respostas</Text>
+
+                            <TouchableOpacity onPress={() => addAnswer(questionIndex)}>
                                 <Text style={styles.btnAddOptionText}>+ Opção</Text>
                             </TouchableOpacity>
                         </View>
 
-                        {/* Lista Dinâmica de Respostas */}
-                        {q.answers.map((ans: Answer, ansIndex: number) => (
-                            <View key={ans.id} style={styles.optionRow}>
+                        {question.answers.map((answer, answerIndex) => (
+                            <View key={answer.id} style={styles.answerRow}>
                                 <TouchableOpacity
                                     style={[
                                         styles.radioCircle,
-                                        ans.correct && styles.radioSelected,
+                                        answer.correct && styles.radioSelected,
                                     ]}
-                                    onPress={() => setCorrectAnswer(qIndex, ansIndex)}
+                                    onPress={() =>
+                                        setCorrectAnswer(questionIndex, answerIndex)
+                                    }
                                 />
+
                                 <TextInput
-                                    style={[styles.input, {flex: 1, marginBottom: 0}]}
-                                    placeholder={`Opção ${ansIndex + 1} *`}
-                                    value={ans.text}
-                                    onChangeText={(text) => updateAnswerText(qIndex, ansIndex, text)}
+                                    style={[styles.input, styles.answerInput]}
+                                    placeholder={`Resposta ${answerIndex + 1}`}
+                                    value={answer.text}
+                                    onChangeText={(text) =>
+                                        updateAnswer(questionIndex, answerIndex, text)
+                                    }
                                 />
-                                {q.answers.length > 2 && (
+
+                                {question.answers.length > 2 && (
                                     <TouchableOpacity
-                                        style={styles.btnDeleteOption}
-                                        onPress={() => removeOption(qIndex, ansIndex)}
+                                        onPress={() =>
+                                            removeAnswer(questionIndex, answerIndex)
+                                        }
                                     >
-                                        <Text style={styles.btnDeleteOptionText}>✕</Text>
+                                        <Text style={styles.btnRemoveText}>✕</Text>
                                     </TouchableOpacity>
                                 )}
                             </View>
@@ -346,6 +559,7 @@ function StepQuestions({formData, setFormData, onNext, onBack}: any) {
                 <TouchableOpacity style={styles.btnSecondary} onPress={onBack}>
                     <Text style={styles.btnSecondaryText}>Voltar</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.btnPrimary} onPress={onNext}>
                     <Text style={styles.btnText}>Próximo</Text>
                 </TouchableOpacity>
@@ -354,32 +568,49 @@ function StepQuestions({formData, setFormData, onNext, onBack}: any) {
     );
 }
 
-// Passo 3: Review
-function StepPreview({formData, onBack, onSave}: any) {
+
+function StepPreview({
+                         formData,
+                         onBack,
+                         onSave,
+                     }: {
+    formData: ActivityData;
+    onBack: () => void;
+    onSave: () => void;
+}) {
     return (
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Resumo</Text>
 
-            <View style={styles.summaryBadgeRow}>
+            <View style={styles.tagsRow}>
                 <Text style={styles.tag}>{formData.type}</Text>
-                {formData.level ? <Text style={styles.tag}>{formData.level}</Text> : null}
+                <Text style={styles.tag}>{formData.level}</Text>
             </View>
 
-            <Text style={styles.summaryTitle}>{formData.title || 'Sem título'}</Text>
-            <Text style={styles.summaryDesc}>{formData.description || 'Sem descrição'}</Text>
+            <Text style={styles.summaryTitle}>
+                {formData.title || 'Sem título'}
+            </Text>
 
-            {formData.questions.map((q: Question, idx: number) => (
-                <View key={q.id} style={styles.previewQuestionBox}>
-                    <Text style={styles.questionTitle}>Pergunta {idx + 1}: {q.text || 'Sem texto'}</Text>
-                    {q.answers.map((ans, ansIdx) => (
+            <Text style={styles.summaryDescription}>
+                {formData.description || 'Sem descrição'}
+            </Text>
+
+            {formData.questions.map((question, questionIndex) => (
+                <View key={question.id} style={styles.previewQuestion}>
+                    <Text style={styles.questionTitle}>
+                        {questionIndex + 1}. {question.text}
+                    </Text>
+
+                    {question.answers.map((answer, answerIndex) => (
                         <Text
-                            key={ans.id}
+                            key={answer.id}
                             style={[
                                 styles.previewText,
-                                ans.correct && {fontWeight: 'bold', color: '#2563EB'}
+                                answer.correct && styles.correctAnswer,
                             ]}
                         >
-                            {ansIdx + 1}. {ans.text || 'Opção vazia'} {ans.correct ? '(Correta)' : ''}
+                            {answerIndex + 1}. {answer.text}
+                            {answer.correct ? ' (Correta)' : ''}
                         </Text>
                     ))}
                 </View>
@@ -389,7 +620,8 @@ function StepPreview({formData, onBack, onSave}: any) {
                 <TouchableOpacity style={styles.btnSecondary} onPress={onBack}>
                     <Text style={styles.btnSecondaryText}>Voltar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.btnPrimary, {backgroundColor: '#2563EB'}]} onPress={onSave}>
+
+                <TouchableOpacity style={styles.btnPrimary} onPress={onSave}>
                     <Text style={styles.btnText}>Salvar</Text>
                 </TouchableOpacity>
             </View>
@@ -397,90 +629,79 @@ function StepPreview({formData, onBack, onSave}: any) {
     );
 }
 
-// --- ESTILOS COMPLETOS ---
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8FAFC'
+        backgroundColor: '#F8FAFC',
     },
     content: {
-        padding: 16
+        padding: 16,
     },
     stepperContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         padding: 16,
-        backgroundColor: '#FFF',
-        borderBottomWidth: 1,
-        borderBottomColor: '#E2E8F0',
+        backgroundColor: '#FFFFFF',
     },
     stepItem: {
         alignItems: 'center',
-        flexDirection: 'row',
-        gap: 6
     },
     badge: {
-        width: 24,
-        height: 24,
-        borderRadius: 12,
+        width: 25,
+        height: 25,
+        borderRadius: 20,
         backgroundColor: '#CBD5E1',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     badgeActive: {
-        backgroundColor: '#2563EB'
-    },
-    badgeDone: {
-        backgroundColor: '#2563EB'
+        backgroundColor: '#2563EB',
     },
     badgeText: {
-        fontSize: 12,
-        color: '#475569',
-        fontWeight: 'bold'
+        color: '#374151',
+        fontWeight: 'bold',
     },
     badgeTextActive: {
-        color: '#FFF'
+        color: '#FFFFFF',
     },
     stepLabel: {
-        fontSize: 12,
-        color: '#475569'
+        fontSize: 11,
+        color: '#374151',
     },
     line: {
         flex: 1,
         height: 1,
-        backgroundColor: '#E2E8F0',
-        marginHorizontal: 8
+        backgroundColor: '#CBD5E1',
+        marginHorizontal: 6,
     },
     card: {
-        backgroundColor: '#FFF',
-        borderRadius: 12,
+        backgroundColor: '#FFFFFF',
         padding: 16,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#E2E8F0'
+        borderColor: '#E2E8F0',
     },
     cardTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 16,
-        color: '#1E293B'
+        color: '#374151',
+        marginBottom: 12,
     },
     label: {
-        fontSize: 14,
-        fontWeight: '500',
-        color: '#475569',
-        marginTop: 12,
-        marginBottom: 4
+        marginTop: 10,
+        marginBottom: 5,
+        color: '#374151',
+        fontWeight: '600',
     },
     checkboxRow: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 8,
         marginVertical: 4,
-        gap: 8
     },
     optionLabel: {
-        fontSize: 14,
-        color: '#1E293B'
+        color: '#374151',
     },
     input: {
         borderWidth: 1,
@@ -491,164 +712,142 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     textArea: {
-        height: 80,
-        textAlignVertical: 'top'
+        height: 90,
+        textAlignVertical: 'top',
     },
     btnPrimary: {
+        flex: 1,
         backgroundColor: '#2563EB',
-        padding: 12,
         borderRadius: 8,
+        padding: 12,
         alignItems: 'center',
-        marginTop: 20,
-        flex: 1
+        marginTop: 18,
     },
     btnText: {
-        color: '#FFF',
-        fontWeight: 'bold'
+        color: '#FFFFFF',
+        fontWeight: 'bold',
     },
     btnSecondary: {
+        flex: 1,
         backgroundColor: '#E2E8F0',
-        padding: 12,
         borderRadius: 8,
+        padding: 12,
         alignItems: 'center',
-        marginTop: 20,
-        flex: 1
+        marginTop: 18,
     },
     btnSecondaryText: {
-        color: '#475569',
-        fontWeight: 'bold'
+        color: '#374151',
+        fontWeight: 'bold',
     },
     buttonGroup: {
         flexDirection: 'row',
-        gap: 12
+        gap: 10,
     },
     headerRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 16
     },
     btnAdd: {
-        backgroundColor: '#1E293B',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 6
+        backgroundColor: '#374151',
+        padding: 8,
+        borderRadius: 6,
     },
     btnAddText: {
-        color: '#FFF',
-        fontSize: 12,
-        fontWeight: 'bold'
-    },
-    emptyContainer: {
-        padding: 32,
-        alignItems: 'center'
+        color: '#FFFFFF',
+        fontWeight: 'bold',
     },
     emptyText: {
-        fontWeight: 'bold',
-        color: '#64748B'
-    },
-    emptySubtext: {
-        fontSize: 12,
-        color: '#94A3B8'
+        textAlign: 'center',
+        color: '#64748B',
+        marginVertical: 25,
     },
     questionCard: {
         backgroundColor: '#F1F5F9',
-        padding: 12,
         borderRadius: 8,
-        marginBottom: 12
+        padding: 10,
+        marginTop: 10,
     },
     questionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
         marginBottom: 8,
     },
     questionTitle: {
+        color: '#374151',
         fontWeight: 'bold',
-        color: '#334155'
     },
     btnRemoveText: {
         color: '#EF4444',
-        fontSize: 12,
         fontWeight: 'bold',
     },
-    optionHeaderRow: {
+    optionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 6,
-        marginBottom: 8,
+        marginBottom: 6,
     },
     sectionLabel: {
-        fontSize: 12,
-        fontWeight: '600',
+        fontSize: 13,
         color: '#64748B',
+        fontWeight: '600',
     },
     btnAddOptionText: {
         color: '#2563EB',
         fontWeight: 'bold',
-        fontSize: 12,
     },
-    optionRow: {
+    answerRow: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
     },
+    answerInput: {
+        flex: 1,
+    },
     radioCircle: {
         width: 20,
         height: 20,
-        borderRadius: 10,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: '#94A3B8',
-        marginBottom: 10,
     },
     radioSelected: {
         backgroundColor: '#2563EB',
         borderColor: '#2563EB',
     },
-    btnDeleteOption: {
-        paddingHorizontal: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    btnDeleteOptionText: {
-        color: '#EF4444',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    summaryBadgeRow: {
+    tagsRow: {
         flexDirection: 'row',
         gap: 8,
-        marginBottom: 12
+        marginBottom: 10,
     },
     tag: {
-        backgroundColor: '#E0E7FF',
-        color: '#3730A3',
+        backgroundColor: '#DBEAFE',
+        color: '#1D4ED8',
         paddingHorizontal: 8,
         paddingVertical: 4,
-        borderRadius: 4,
-        fontSize: 12,
-        fontWeight: '600'
+        borderRadius: 5,
     },
     summaryTitle: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: 'bold',
-        color: '#0F172A'
+        color: '#374151',
     },
-    summaryDesc: {
+    summaryDescription: {
         color: '#64748B',
-        marginVertical: 4
+        marginTop: 5,
     },
-    previewQuestionBox: {
+    previewQuestion: {
         marginTop: 12,
         padding: 10,
         borderWidth: 1,
         borderColor: '#E2E8F0',
-        borderRadius: 6
+        borderRadius: 8,
     },
     previewText: {
-        color: '#334155',
-        marginTop: 2,
+        color: '#374151',
+        marginTop: 4,
+    },
+    correctAnswer: {
+        color: '#2563EB',
+        fontWeight: 'bold',
     },
 });

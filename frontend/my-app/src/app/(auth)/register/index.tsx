@@ -1,46 +1,60 @@
-import {Text, View, StyleSheet,} from "react-native";
-import {Host, Checkbox} from '@expo/ui/jetpack-compose';
+import {Text, View, StyleSheet, TextInput,} from "react-native";
 import {useState} from "react";
 import PrimaryButton from '../../../componets/PrimaryButton'
-import { useRouter} from 'expo-router'
+import {router} from 'expo-router'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Alert } from 'react-native';
 
-type TipoUsuario = 'aluno' | 'professor' | null;
 
-export default function Index() {
-    const router = useRouter();
-    const [tipoUsuario, setTipoUsuario] = useState<TipoUsuario>(null);
-
-    const opcoes = [
-        { id: 'aluno', label: 'Aluno' },
-        { id: 'professor', label: 'Professor' },
-    ];
+export default function Register() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleNext = () => {
-        if (!tipoUsuario) return; // Evita avançar sem selecionar uma opção
-
+        if (email == '' || password == '') {
+            Alert('Please enter a valid email');
+            return;
+        }
         router.push({
-            pathname: '/(auth)/register/who',
-            params: { isTeacher: tipoUsuario === 'professor' ? 'true' : 'false' }
+            pathname: '/(auth)/register/user',
+            params: {
+                email,
+                senha: password,
+            },
+
         });
     };
 
+
     return (
         <View style={styles.container}>
-            <Text style={styles.containerTitle}>Você é </Text>
             <View style={styles.containerMain}>
+                <View style={{alignItems: 'center',}}>
+                    <Text style={styles.title}>Englishzinho</Text>
+                    <Text style={styles.subtitle}>Cadastrar</Text>
+                </View>
 
-                {opcoes.map((opcao) => (
-                    <View key={opcao.id} style={styles.cardsChecked}>
-                        <Host matchContents>
-                            <Checkbox
-                                value={tipoUsuario === opcao.id}
-                                onCheckedChange={(checked) => setTipoUsuario(checked ? opcao.id as TipoUsuario : null)}
-                                colors={{ checkedColor: '#2563EB', checkmarkColor: '#FFF' }}
-                            />
-                        </Host>
-                        <Text style={styles.VeiwTitle}>{opcao.label}</Text>
+                <View style={styles.inputsView}>
+
+                    <View style={styles.inputView}>
+                        <MaterialIcons name="email" size={24} color="#374151"/>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="Digite seu e-mail"
+                            onChangeText={setEmail}
+                        />
                     </View>
-                ))}
+
+                    <View style={styles.inputView}>
+                        <MaterialIcons name="password" size={24} color="#374151"/>
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="Crie sua senha"
+                            onChangeText={setPassword}
+                        />
+                    </View>
+
+                </View>
 
                 <PrimaryButton
                     onPress={handleNext}
@@ -58,31 +72,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 15,
     },
-
     containerMain: {
         gap: 20
     },
 
-    containerTitle: {
-        fontSize: 20,
-        textAlign:'center',
-        fontFamily: 'Inter_500Medium',
-        color: '#374151',
-        marginBottom: 20,
-    },
+    mainTitle: {},
 
-    cardsChecked: {
+    title: {
+        fontFamily: 'Inter_800ExtraBold',
+        fontSize: 47,
+        color: "#2563EB"
+    },
+    subtitle: {
+        fontFamily: 'Inter_500Medium',
+        fontSize: 20,
+        color: '#374151'
+    },
+    inputsView: {
+        gap: 15
+    },
+    inputView: {
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#757575',
-        borderRadius: 5
+        borderColor: '#9CA3AF',
+        borderRadius: 5,
+        gap: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5
     },
-
-    VeiwTitle:{
-        fontFamily: 'Inter_600SemiBold',
+    textInput: {
         fontSize: 20,
-        color: '#374151',
+        fontFamily: 'Inter_600SemiBold',
+        color: '#374151'
     }
-
 });

@@ -1,53 +1,38 @@
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {useEffect, useState} from "react";
 import {Link} from "expo-router";
 
-const videos = [
-    {
-        id: 1,
-        title: 'Gramatica Basica',
-        description: "Aprenda a comprimentar as pessoas e se apresenta em inglês",
-        type: 'Gramatica',
-        nivel: 'Iniciante',
-        url: 'tVlcKp3bWH8',
-    },
-    {
-        id: 2,
-        title: 'Gramatica Basica',
-        description: "Aprenda a comprimentar as pessoas e se apresenta em inglês",
-        type: 'Gramatica',
-        nivel: 'Avançado',
-        url: 'sK8T8gbYIfA',
-    },
+import {listarVideos} from '../../../services/api';
 
-    {
-        id: 3,
-        title: 'Gramatica Basica',
-        description: "Aprenda a comprimentar as pessoas e se apresenta em inglês",
-        type: 'Gramatica',
-        nivel: 'Intermediario',
-        url: 'frN3nvhIHUk',
-    },
 
-    {
-        id: 4,
-        title: 'Gramatica Basica',
-        description: "Aprenda a comprimenta as pessoas e se apresenta em inglês",
-        type: 'Gramática',
-        nivel: 'Iniciante',
-        url: 'ddDN30evKPc',
-    },
-    {
-        id: 5,
-        title: 'Gramatica Basica',
-        description:'Aprenda como pronuncia a letras corretamente',
-        type: 'Vocabulário',
-        nivel: 'Iniciante',
-        url:'ChqnN3cKzXQ'
-    }
-];
+export default function BibliotecaVideos() {
+    const [videos, setVideos] = useState<VideoType[]>([]);
+    const [carregando, setCarregando] = useState(true);
 
-export default function () {
+    useEffect(() => {
+        async function carregarVideos() {
+            try {
+                const dados = await listarVideos();
+                setVideos(dados);
+            } catch (error) {
+                console.log('Erro ao carregar vídeos:', error);
+            } finally {
+                setCarregando(false);
+            }
+        }
+
+        carregarVideos();
+    }, []);
+
 
     return (
         <View style={styles.container}>
@@ -61,39 +46,46 @@ export default function () {
                         inglês</Text>
                 </View>
 
-                {
+                {carregando ? (
+                    <ActivityIndicator size="large" color="#2563EB"/>
+                ) : (
                     videos.map((video) => (
-                            <Link key={video.id}
-                                  href={{
-                                      pathname: '/videoTela',
-                                      params: {
-                                          videoSelecionado: JSON.stringify(video),
-                                          listaVideos: JSON.stringify(videos),
-                                      }
-                                  }}
-                                  style={styles.videoCardContainer}
-                            >
+                        <Link
+                            key={video.id}
+                            asChild
+                            href={{
+                                pathname: '/videoTela',
+                                params: {
+                                    videoId: String(video.id),
+                                },
+                            }}
+                        >
+                            <Pressable style={styles.videoCardContainer}>
                                 <Image
-                                    source={{uri: `https://img.youtube.com/vi/${video.url}/mqdefault.jpg`}}
+                                    source={{
+                                        uri: `https://img.youtube.com/vi/${video.url}/mqdefault.jpg`,
+                                    }}
                                     style={{
                                         width: '100%',
                                         height: 200,
                                         borderTopLeftRadius: 5,
-                                        borderTopRightRadius: 5
+                                        borderTopRightRadius: 5,
                                     }}
-                                    resizeMode='cover'
+                                    resizeMode="cover"
                                 />
+
                                 <View style={styles.videoTagsTitle}>
                                     <View style={styles.tagsVideo}>
                                         <Text style={styles.tag}>{video.nivel}</Text>
                                         <Text style={styles.tag}>{video.type}</Text>
                                     </View>
+
                                     <Text style={styles.videoTitle}>{video.title}</Text>
                                 </View>
-                            </Link>
-                        )
-                    )
-                }
+                            </Pressable>
+                        </Link>
+                    ))
+                )}
             </ScrollView>
         </View>
     )

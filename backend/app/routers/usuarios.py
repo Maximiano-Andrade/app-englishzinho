@@ -5,11 +5,11 @@ from app.schemas.schemas import UsuarioCreate, UsuarioResponse
 from sqlalchemy.orm import Session
 
 router = APIRouter(
-    prefix="/usuarios",
-    tags=["Usuarios"]
+    prefix="/usuario",
+    tags=["Usuario"]
 )
 
-@router.post("/", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/cradastar", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)
 def criar_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     user = usuarioCrud.criar_usuario_db(db, usuario)
     return user

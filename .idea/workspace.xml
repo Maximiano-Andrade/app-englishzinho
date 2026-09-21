@@ -5,11 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d10598f-d2d1-41c6-8956-9cb4409a310c" name="Changes" comment="Adicionado novas funcionalidades">
-      <change afterPath="$PROJECT_DIR$/frontend/my-app/src/componets/QuartoButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/models/answer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/models/atividade.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/models/questao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/models/video.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/routers/atividade.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/routers/video.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/user.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/database/db/english.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/database/db/english.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/professor.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/professor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/routers/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/routers/usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/usuarios.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/level.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/level.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/school.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/school.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/who.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/who.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/biblioteca.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/biblioteca.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/videoTela.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/videoTela.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,61 +74,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="3.8543841640827677E-299" />
-      <entry key="MS500" value="2.0758262505621603E-60" />
-      <entry key="S2" value="1.2003219706156166E-15" />
-      <entry key="S5" value="1.0766684446530305E-6" />
-      <entry key="S10" value="0.0010769544785709639" />
-      <entry key="S30" value="0.15453075329520394" />
-      <entry key="S60" value="0.6439911755688187" />
-      <entry key="M2" value="1.3745516721967865" />
-      <entry key="M5" value="2.7509028714146293" />
-      <entry key="M10" value="6.9270558457327" />
-      <entry key="M15" value="13.025162487723332" />
-      <entry key="M30" value="34.91881113367603" />
-      <entry key="H1" value="78.52234749988652" />
-      <entry key="H2" value="156.86905800660577" />
-      <entry key="H4" value="293.77054765800364" />
-      <entry key="D1" value="1414.836204640797" />
-      <entry key="W1" value="2743.4593044701405" />
-    </decayedCancelled>
-    <decayedSelected>
       <entry key="MS100" value="1.0" />
       <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0000000000000004" />
-      <entry key="S5" value="1.0000007240536821" />
-      <entry key="S10" value="1.0008509134398438" />
-      <entry key="S30" value="1.094769033629089" />
-      <entry key="S60" value="1.3127879741333754" />
-      <entry key="M2" value="1.677505414810927" />
-      <entry key="M5" value="2.8744734801341956" />
-      <entry key="M10" value="5.842999932702293" />
-      <entry key="M15" value="9.930876803136478" />
-      <entry key="M30" value="25.262488221676122" />
-      <entry key="H1" value="58.3559513255674" />
-      <entry key="H2" value="120.85077315301322" />
-      <entry key="H4" value="228.35785133370948" />
-      <entry key="D1" value="799.6191060796425" />
-      <entry key="W1" value="1249.436269767059" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0" />
+      <entry key="S30" value="1.0000000000000002" />
+      <entry key="S60" value="1.0000000156658686" />
+      <entry key="M2" value="1.0001251633675103" />
+      <entry key="M5" value="1.027487658738268" />
+      <entry key="M10" value="1.1774567786006644" />
+      <entry key="M15" value="1.4597939545407297" />
+      <entry key="M30" value="4.353093213389231" />
+      <entry key="H1" value="19.222468920777327" />
+      <entry key="H2" value="71.44386561178443" />
+      <entry key="H4" value="208.36723107630232" />
+      <entry key="D1" value="1425.4287237386213" />
+      <entry key="W1" value="3047.7907104258343" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="2.884797205307185E-273" />
+      <entry key="S30" value="1.4235468441195856E-91" />
+      <entry key="S60" value="3.772992907064543E-46" />
+      <entry key="M2" value="1.943918412211452E-23" />
+      <entry key="M5" value="9.288908148123167E-10" />
+      <entry key="M10" value="5.3384091486327576E-5" />
+      <entry key="M15" value="0.002665817945379009" />
+      <entry key="M30" value="0.22910518718973533" />
+      <entry key="H1" value="3.646977527012399" />
+      <entry key="H2" value="21.31007246599994" />
+      <entry key="H4" value="82.41468400041774" />
+      <entry key="D1" value="686.6458230399791" />
+      <entry key="W1" value="1291.35142912161" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="8.524224381044152E-6" />
-      <entry key="MS500" value="0.09685699136989641" />
-      <entry key="S2" value="0.5578696611624829" />
-      <entry key="S5" value="0.7917970041800012" />
-      <entry key="S10" value="0.8915178673854748" />
-      <entry key="S30" value="1.2023794140088284" />
-      <entry key="S60" value="1.9231878152838677" />
-      <entry key="M2" value="3.028311111742231" />
-      <entry key="M5" value="5.609055653388173" />
-      <entry key="M10" value="12.751906230859886" />
-      <entry key="M15" value="22.93354419740417" />
-      <entry key="M30" value="60.15047184598459" />
-      <entry key="H1" value="136.84263061343015" />
-      <entry key="H2" value="277.68301110470276" />
-      <entry key="H4" value="522.0931912938917" />
-      <entry key="D1" value="2214.431690200451" />
-      <entry key="W1" value="3992.889877293601" />
+      <entry key="MS100" value="0.059954007457829014" />
+      <entry key="MS500" value="0.5695916886110575" />
+      <entry key="S2" value="0.8687421851506233" />
+      <entry key="S5" value="0.9452710652724057" />
+      <entry key="S10" value="0.972250515696652" />
+      <entry key="S30" value="0.9906632686551361" />
+      <entry key="S60" value="0.9953207019974891" />
+      <entry key="M2" value="0.9977827320338118" />
+      <entry key="M5" value="1.0265473102422862" />
+      <entry key="M10" value="1.1770325147897034" />
+      <entry key="M15" value="1.4621251064794087" />
+      <entry key="M30" value="4.581647195654672" />
+      <entry key="H1" value="22.86668143785691" />
+      <entry key="H2" value="92.7462236949214" />
+      <entry key="H4" value="290.767464329404" />
+      <entry key="D1" value="2112.053728634701" />
+      <entry key="W1" value="4339.136186266849" />
     </decayedShown>
   </component>
   <component name="PackageJsonUpdateNotifier">
@@ -162,7 +186,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-eff1e8def5f5-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.10315.174" />
+        <option value="bundled-python-sdk-73a66231627c-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.10968.92" />
       </set>
     </attachedChunks>
   </component>
@@ -198,7 +222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789856718036</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adicionado novas funcionalidades">
+      <option name="closed" value="true" />
+      <created>1789995171986</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1789995171986</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,26 +240,5 @@
     <MESSAGE value="updade" />
     <MESSAGE value="Adicionado novas funcionalidades" />
     <option name="LAST_COMMIT_MESSAGE" value="Adicionado novas funcionalidades" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/index.tsx</url>
-          <line>54</line>
-          <option name="temporary" value="true" />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx</url>
-          <line>615</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/backend/app/models/aluno.py</url>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

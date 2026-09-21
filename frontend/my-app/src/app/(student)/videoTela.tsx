@@ -1,6 +1,18 @@
-import {View, Text, StyleSheet, ScrollView, Image} from "react-native";
-import {useLocalSearchParams, Link} from "expo-router";
-import YoutubePlayer from "react-native-youtube-iframe";
+import {
+    ActivityIndicator,
+    Image,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
+
+import {useEffect, useState} from 'react';
+import {Link, useLocalSearchParams} from 'expo-router';
+import YoutubePlayer from 'react-native-youtube-iframe';
+
+import {listarVideos} from '../../services/api';
 
 type VideoType = {
     id: number;
@@ -12,19 +24,37 @@ type VideoType = {
 };
 
 export default function Video() {
-    const {videoSelecionado: videoParam, listaVideos} =
-        useLocalSearchParams<{
-            videoSelecionado: string;
-            listaVideos: string;
-        }>();
+    const {videoId} = useLocalSearchParams<{ videoId: string }>();
 
-    const videoSelecionado: VideoType | null = videoParam
-        ? JSON.parse(videoParam)
-        : null;
+    const [videos, setVideos] = useState<VideoType[]>([]);
+    const [carregando, setCarregando] = useState(true);
 
-    const videos: VideoType[] = listaVideos
-        ? JSON.parse(listaVideos)
-        : [];
+    useEffect(() => {
+        async function carregarVideos() {
+            try {
+                const dados = await listarVideos();
+                setVideos(dados);
+            } catch (error) {
+                console.log('Erro ao carregar vídeos:', error);
+            } finally {
+                setCarregando(false);
+            }
+        }
+
+        carregarVideos();
+    }, []);
+
+    const videoSelecionado = videos.find(
+        (video) => video.id === Number(videoId),
+    );
+
+    if (carregando) {
+        return <ActivityIndicator size="large" color="#2563EB"/>;
+    }
+
+    if (!videoSelecionado) {
+        return <Text>Vídeo não encontrado.</Text>;
+    }
 
     return (
         <View style={styles.container}>
@@ -47,37 +77,44 @@ export default function Video() {
                 </View>
 
                 <ScrollView contentContainerStyle={styles.relatedVideo} showsVerticalScrollIndicator={false}>
-                    {videos.map((video) => (
-                        <Link key={video.id} style={styles.cardVideoRecommendation}
-                              href={{
-                                  pathname: '/videoTela',
-                                  params: {
-                                      videoSelecionado: JSON.stringify(video),
-                                      listaVideos: JSON.stringify(videos),
-                                  }
-                              }}
-                        >
-                            <Image
-                                source={{uri: `https://img.youtube.com/vi/${video.url}/mqdefault.jpg`}}
-                                style={{
-                                    width: 181,
-                                    height: 120,
-                                    borderTopLeftRadius: 5,
-                                    borderBottomLeftRadius: 5
+                    {videos
+                        .filter((video) => video.id !== videoSelecionado.id)
+                        .map((video) => (
+                            <Link
+                                key={video.id}
+                                asChild
+                                href={{
+                                    pathname: '/videoTela',
+                                    params: {
+                                        videoId: String(video.id),
+                                    },
                                 }}
-                                resizeMode='cover'
-                            />
+                            >
+                                <Pressable style={styles.cardVideoRecommendation}>
+                                    <Image
+                                        source={{
+                                            uri: `https://img.youtube.com/vi/${video.url}/mqdefault.jpg`,
+                                        }}
+                                        style={{
+                                            width: 181,
+                                            height: 120,
+                                            borderTopLeftRadius: 5,
+                                            borderBottomLeftRadius: 5,
+                                        }}
+                                        resizeMode="cover"
+                                    />
 
-                            <View style={styles.recommendationTitleNivelType}>
-                                <Text style={styles.recommendationTitle}>{video.title}</Text>
-                                <View style={styles.recommendationTags}>
-                                    <Text style={styles.recommendationTag}>{video.nivel}</Text>
-                                    <Text style={styles.recommendationTag}>{video.type}</Text>
-                                </View>
-                            </View>
+                                    <View style={styles.recommendationTitleNivelType}>
+                                        <Text style={styles.recommendationTitle}>{video.title}</Text>
 
-                        </Link>
-                    ))}
+                                        <View style={styles.recommendationTags}>
+                                            <Text style={styles.recommendationTag}>{video.nivel}</Text>
+                                            <Text style={styles.recommendationTag}>{video.type}</Text>
+                                        </View>
+                                    </View>
+                                </Pressable>
+                            </Link>
+                        ))}
                 </ScrollView>
             </View>
 
