@@ -45,7 +45,7 @@ export default function TabLayout() {
                 style={styles.headerContainer}
             >
                 <Text style={styles.userName}>
-                    Olá, {primeiroNome}
+                    Hello, {primeiroNome}
                 </Text>
 
                 <Image

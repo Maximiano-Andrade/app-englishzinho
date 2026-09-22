@@ -5,23 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d10598f-d2d1-41c6-8956-9cb4409a310c" name="Changes" comment="Adicionado novas funcionalidades">
-      <change afterPath="$PROJECT_DIR$/backend/app/models/progressoAtividade.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/routers/progresso.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/database/db/english.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/models/aluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/aluno.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/models/atividade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/atividade.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/routers/atividade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/atividade.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/routers/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,7 +327,15 @@
       <option name="project" value="LOCAL" />
       <updated>1790030519820</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Adicionado novas funcionalidades">
+      <option name="closed" value="true" />
+      <created>1790092772407</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1790092772407</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
