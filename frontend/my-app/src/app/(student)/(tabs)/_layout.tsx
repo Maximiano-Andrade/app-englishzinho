@@ -1,19 +1,64 @@
-import {router, Tabs} from 'expo-router';
-import {Image, Pressable, StyleSheet, Text, TouchableOpacity} from "react-native";
+
+import {
+    Image,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+} from 'react-native';
+import {router, Tabs, useFocusEffect} from 'expo-router';
+import {useCallback, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function TabLayout() {
+type UsuarioSalvo = {
+    nome: string;
+    foto_perfil?: string | null;
+};
 
-    const ProfileAvatar = () => (
-        <TouchableOpacity onPress={() => router.push('/login')}
-                          style={styles.headerContainer}>
-            <Text style={styles.userName}>Hello! Mario</Text>
-            <Image
-                source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCgKuIQccHhGprKeBE3__HPBWCvxWvr-pLPMiIyMwQCfLDrpqZYShnDZ4&s=10'}}
-                style={styles.avatar}
-            />
-        </TouchableOpacity>
+export default function TabLayout() {
+    const [usuario, setUsuario] = useState<UsuarioSalvo | null>(null);
+
+    useFocusEffect(
+        useCallback(() => {
+            async function carregarUsuario() {
+                const dados = await AsyncStorage.getItem('@usuario');
+
+                if (dados) {
+                    setUsuario(JSON.parse(dados));
+                } else {
+                    setUsuario(null);
+                }
+            }
+
+            carregarUsuario();
+        }, []),
     );
+
+    const ProfileAvatar = () => {
+        const primeiroNome = usuario?.nome?.split(' ')[0] || 'Aluno';
+
+        return (
+            <TouchableOpacity
+                onPress={() => router.push('/login')}
+                style={styles.headerContainer}
+            >
+                <Text style={styles.userName}>
+                    Olá, {primeiroNome}
+                </Text>
+
+                <Image
+                    source={{
+                        uri:
+                            usuario?.foto_perfil ||
+                            'https://pixabay.com/pt/images/download/whitesession-woman-2112292_1920.jpg',
+                    }}
+                    style={styles.avatar}
+                />
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <Tabs screenOptions={{
@@ -54,14 +99,14 @@ export default function TabLayout() {
             }}
             />
 
-             <Tabs.Screen name="biblioteca" options={{
-                 headerTitle: 'Biblioteca',
-                 title: '',
-                 headerTitleAlign: 'center',
-                 tabBarIcon: ({color, focused}) => (
-                     <Ionicons name={focused ? 'play' : 'play-outline'} size={24} color={color} />
-                 )
-             }}/>
+            <Tabs.Screen name="biblioteca" options={{
+                headerTitle: 'Biblioteca',
+                title: '',
+                headerTitleAlign: 'center',
+                tabBarIcon: ({color, focused}) => (
+                    <Ionicons name={focused ? 'play' : 'play-outline'} size={24} color={color}/>
+                )
+            }}/>
         </Tabs>
     );
 }

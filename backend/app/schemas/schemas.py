@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, EmailStr
 from app.models.atividade import ActivityLevel, ActivityType
-
+from app.models.progressoAtividade import StatusAtividade
 
 class UsuarioCreate(BaseModel):
     nome: str
@@ -29,6 +29,8 @@ class Login(BaseModel):
 
 class LoginResponse(BaseModel):
     id_usuario: int
+    id_aluno: int | None = None
+    id_professor: int | None = None
     nome: str
     email: str
     tipo_usuario: str
@@ -38,11 +40,9 @@ class LoginResponse(BaseModel):
 class AnswerCreate(BaseModel):
     text: str
     correct: bool = False
-
 class QuestionCreate(BaseModel):
     text: str
     answers: list[AnswerCreate]
-
 class AtividadeCreate(BaseModel):
     professor_id: int
 
@@ -63,6 +63,36 @@ class AtividadeResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+# BUSCA ATIVIDADE PARA ALUNO
+class AnswerResponse(BaseModel):
+    id: int
+    text: str
+    correct: bool
+
+    model_config = ConfigDict(from_attributes=True)
+class QuestionResponse(BaseModel):
+    id: int
+    text: str
+    answers: list[AnswerResponse]
+
+    model_config = ConfigDict(from_attributes=True)
+class AtividadeDetalheResponse(AtividadeResponse):
+    questions: list[QuestionResponse]
+
+# STATUS DA ATIVIDADE
+class ProgressoAtividadeCreate(BaseModel):
+    aluno_id: int
+    atividade_id: int
+class ProgressoAtividadeUpdate(BaseModel):
+    status: StatusAtividade
+class ProgressoAtividadeResponse(BaseModel):
+    id: int
+    aluno_id: int
+    atividade_id: int
+    status: StatusAtividade
+    completed_at: datetime | None = None
+    model_config = ConfigDict(from_attributes=True)
+
 # Video para assistir
 class VideoCreate(BaseModel):
     title: str
@@ -70,7 +100,6 @@ class VideoCreate(BaseModel):
     type: str
     nivel: str
     url: str
-
 class VideoResponse(BaseModel):
     id: int
     title: str
@@ -83,3 +112,5 @@ class VideoResponse(BaseModel):
 
 UsuarioCreate.model_rebuild()
 UsuarioResponse.model_rebuild()
+ProgressoAtividadeCreate.model_rebuild()
+ProgressoAtividadeResponse.model_rebuild()

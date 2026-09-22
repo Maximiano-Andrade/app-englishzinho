@@ -20,10 +20,12 @@ class ActivityLevel(str, Enum):
     INTERMEDIARIO = "Intermediário"
     AVANCADO = "Avançado"
 
+
 class ActivityType(str, Enum):
     QUIZ = "Quiz"
     ESCUTA = "Escuta"
     FALA = "Fala"
+
 
 class Atividade(Base):
     __tablename__ = "atividades"
@@ -32,7 +34,7 @@ class Atividade(Base):
 
     professor_id = Column(
         Integer,
-        ForeignKey("professores.id_usuario"),
+        ForeignKey("professor.id_professor"),
         nullable=False,
     )
 
@@ -55,5 +57,11 @@ class Atividade(Base):
     questions = relationship(
         "Question",
         back_populates="activity",
+        cascade="all, delete-orphan",
+    )
+
+    progressos = relationship(
+        "ProgressoAtividade",
+        back_populates="atividade",
         cascade="all, delete-orphan",
     )

@@ -1,79 +1,72 @@
 import {View, Text, StyleSheet, ScrollView} from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import {router} from 'expo-router'
+import {router, useFocusEffect} from 'expo-router'
 import QuartoButton from "../../../componets/QuartoButton";
+import {useCallback, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const atividades = [
-    {
-        id: 1,
-        title: 'Vocabulário basico Quiz',
-        type: 'Quiz',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-        icon: "bars",
-        status: 'Pendente',
-    },
-    {
-        id: 2,
-        title: 'Pratica Pronuncia Fala',
-        type: 'Fala',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Pratique falar frases comuns em inglês com pronúncia correta...',
-        icon: "audio",
-        status: 'Concluído',
-    },
-    {
-        id: 3,
-        title: 'Vocabulário basico Escuta',
-        type: 'Escuta',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-        icon: "sound",
-        status: 'Pendente',
-    },
+import {
+    listarAtividades,
+    listarProgressoDoAluno,
+} from '../../../services/api';
 
-    {
-        id: 5,
-        title: 'Vocabulário basico Escuta',
-        type: 'Escuta',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-        icon: "sound",
-        status: 'Pendente',
-    },
-    {
-        id: 6,
-        title: 'Pratica Pronuncia Fala',
-        type: 'Fala',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Pratique falar frases comuns em inglês com pronúncia correta...',
-        icon: "audio",
-        status: 'Concluído',
-    },
-    {
-        id: 7,
-        title: 'Pratica Pronuncia Fala',
-        type: 'Fala',
-        level: 'Iniciante',
-        date: '12/02/2025',
-        description: 'Pratique falar frases comuns em inglês com pronúncia correta...',
-        icon: "audio",
-        status: 'Concluído',
-    },
-]
+type AtividadeType = {
+    id: number;
+    title: string;
+    description: string;
+    type: 'Quiz' | 'Escuta' | 'Fala';
+    level: string;
+    created_at: string;
+};
+
+type ProgressoType = {
+    id: number;
+    aluno_id: number;
+    atividade_id: number;
+    status: 'Pendente' | 'Concluída';
+};
+
+type UsuarioSalvo = {
+    id_usuario: number;
+    id_aluno: number | null;
+};
 
 export default function Progress() {
 
-    const formatIconName = (name: any) => {
-        if (!name) return 'question';
-        return name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-    };
+    const [atividades, setAtividades] = useState<AtividadeType[]>([]);
+    const [progressos, setProgressos] = useState<ProgressoType[]>([]);
+
+    const carregarDados = useCallback(async () => {
+        try {
+            const usuarioSalvo = await AsyncStorage.getItem('@usuario');
+
+            if (!usuarioSalvo) {
+                return;
+            }
+
+            const usuario: UsuarioSalvo = JSON.parse(usuarioSalvo);
+
+            if (!usuario.id_aluno) {
+                return;
+            }
+
+            const [atividadesData, progressosData] = await Promise.all([
+                listarAtividades(),
+                listarProgressoDoAluno(usuario.id_aluno),
+            ]);
+
+            setAtividades(atividadesData);
+            setProgressos(progressosData);
+        } catch (error) {
+            console.log('Erro ao buscar atividades:', error);
+        }
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarDados();
+        }, [carregarDados]),
+    );
 
     return (
         <View style={styles.container}>
@@ -82,36 +75,79 @@ export default function Progress() {
                     <Text style={styles.headerTitle}>Minha Atividades</Text>
                 </View>
                 <ScrollView contentContainerStyle={styles.cardAtividades} showsVerticalScrollIndicator={false}>
-                    {
-                        atividades.map((atividade) => (
+                    {atividades.map((atividade) => {
+                        const progresso = progressos.find(
+                            (item) => item.atividade_id === atividade.id,
+                        );
+
+                        const status = progresso?.status || 'Pendente';
+
+                        const icon =
+                            atividade.type === 'Quiz'
+                                ? 'bars'
+                                : atividade.type === 'Fala'
+                                    ? 'audio'
+                                    : 'sound';
+
+                        return (
                             <View key={atividade.id} style={styles.cardAtividade}>
                                 <View style={styles.cardAtividadeIconTitleType}>
                                     <View style={styles.cardAtividadeIcon}>
-                                        <AntDesign name={formatIconName(atividade.icon)} size={24} color="#F97316"/>
+                                        <AntDesign
+                                            name={icon}
+                                            size={24}
+                                            color="#F97316"
+                                        />
                                     </View>
-                                    <View style={{gap: 5}}>
-                                        <Text style={styles.cardAtividadeTitle}>{atividade.title}</Text>
-                                        <Text
-                                            style={styles.cardAtividadeSubtitle}>{atividade.type} {atividade.level}</Text>
+
+                                    <View style={{gap: 5, flex: 1}}>
+                                        <Text style={styles.cardAtividadeTitle}>
+                                            {atividade.title}
+                                        </Text>
+
+                                        <Text style={styles.cardAtividadeSubtitle}>
+                                            {atividade.type} • {atividade.level}
+                                        </Text>
                                     </View>
                                 </View>
-                                <Text style={styles.cardAtividadeDescription}>{atividade.description}</Text>
+
+                                <Text style={styles.cardAtividadeDescription}>
+                                    {atividade.description}
+                                </Text>
+
                                 <View style={styles.cardAtividadeDateStatus}>
-                                    <Text style={styles.cardAtividadeDate}>{atividade.date}</Text>
+                                    <Text style={styles.cardAtividadeDate}>
+                                        {new Date(atividade.created_at).toLocaleDateString('pt-BR')}
+                                    </Text>
+
                                     <QuartoButton
                                         onPress={
-                                            atividade.status === 'Pendente'
-                                                ? () => router.push('/(student)/atividade')
+                                            status === 'Pendente'
+                                                ? () =>
+                                                    router.push({
+                                                        pathname: '/(student)/atividade',
+                                                        params: {
+                                                            atividadeId: String(atividade.id),
+                                                        },
+                                                    })
                                                 : undefined
                                         }
-                                        title={atividade.status}
-                                        background={atividade.status == 'Pendente' ? '#EF4444' : '#22C55E'}
-                                        icon={atividade.status == 'Pendente' ? 'play-outline' : 'checkbox'}
+                                        title={status}
+                                        background={
+                                            status === 'Pendente'
+                                                ? '#EF4444'
+                                                : '#22C55E'
+                                        }
+                                        icon={
+                                            status === 'Pendente'
+                                                ? 'play-outline'
+                                                : 'checkbox'
+                                        }
                                     />
                                 </View>
                             </View>
-                        ))
-                    }
+                        );
+                    })}
                 </ScrollView>
             </View>
 

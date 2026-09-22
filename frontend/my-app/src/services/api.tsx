@@ -1,4 +1,4 @@
-const API_URL = 'http://172.31.160.1:8000';
+const API_URL = 'http://172.27.176.1:8000';
 // Expo Go no celular: use o IPv4 do computador.
 // Android Emulator: http://10.0.2.2:8000
 
@@ -165,6 +165,40 @@ export async function listarAtividadesDoProfessor(
     const resposta = await fetch(
         `${API_URL}/atividades/professor/${professorId}`,
     );
+
+    return tratarResposta(resposta);
+}
+
+export async function buscarAtividade(atividadeId: number) {
+    const resposta = await fetch(
+        `${API_URL}/atividades/${atividadeId}`,
+    );
+
+    return tratarResposta(resposta);
+}
+
+export async function listarProgressoDoAluno(alunoId: number) {
+    const resposta = await fetch(
+        `${API_URL}/progresso/aluno/${alunoId}`,
+    );
+
+    return tratarResposta(resposta);
+}
+
+export async function concluirProgresso(
+    alunoId: number,
+    atividadeId: number,
+) {
+    const resposta = await fetch(`${API_URL}/progresso/concluir`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            aluno_id: alunoId,
+            atividade_id: atividadeId,
+        }),
+    });
 
     return tratarResposta(resposta);
 }

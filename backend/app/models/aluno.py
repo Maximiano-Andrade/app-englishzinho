@@ -11,3 +11,7 @@ class Aluno(Base):
 
     # Relacionamentos
     usuario = relationship("Usuario", back_populates="aluno_perfil")
+    progressos = relationship(
+        "ProgressoAtividade",
+        back_populates="aluno",
+    )

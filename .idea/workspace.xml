@@ -5,35 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d10598f-d2d1-41c6-8956-9cb4409a310c" name="Changes" comment="Adicionado novas funcionalidades">
-      <change afterPath="$PROJECT_DIR$/backend/app/models/answer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/atividade.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/questao.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/models/video.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/routers/atividade.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/app/routers/video.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/user.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/models/progressoAtividade.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/routers/progresso.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/crud/usuarioCrud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/database/db/english.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/database/db/english.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/database/db/english.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/models/professor.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/professor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/aluno.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/aluno.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/models/atividade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/models/atividade.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/routers/atividade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/atividade.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/routers/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app/routers/usuarios.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/routers/usuarios.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/level.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/level.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/school.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/school.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/who.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(auth)/register/who.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/biblioteca.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/biblioteca.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/videoTela.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/videoTela.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/(tabs)/progress.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(student)/atividade/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/creater.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/app/(teacher)/(tabs)/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/my-app/src/services/api.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +34,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="TypeScript JSX File" />
+        <option value="Python Script" />
+        <option value="Python Unit Test" />
       </list>
     </option>
   </component>
@@ -78,57 +67,57 @@
       <entry key="MS500" value="1.0" />
       <entry key="S2" value="1.0" />
       <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.0" />
-      <entry key="S30" value="1.0000000000000002" />
-      <entry key="S60" value="1.0000000156658686" />
-      <entry key="M2" value="1.0001251633675103" />
-      <entry key="M5" value="1.027487658738268" />
-      <entry key="M10" value="1.1774567786006644" />
-      <entry key="M15" value="1.4597939545407297" />
-      <entry key="M30" value="4.353093213389231" />
-      <entry key="H1" value="19.222468920777327" />
-      <entry key="H2" value="71.44386561178443" />
-      <entry key="H4" value="208.36723107630232" />
-      <entry key="D1" value="1425.4287237386213" />
-      <entry key="W1" value="3047.7907104258343" />
+      <entry key="S10" value="1.0000000000021654" />
+      <entry key="S30" value="1.000325696079294" />
+      <entry key="S60" value="1.0363489968684705" />
+      <entry key="M2" value="1.4122700531931232" />
+      <entry key="M5" value="3.194254593214653" />
+      <entry key="M10" value="5.671056999853662" />
+      <entry key="M15" value="8.16941290630528" />
+      <entry key="M30" value="17.865641168735422" />
+      <entry key="H1" value="40.91024045171972" />
+      <entry key="H2" value="89.54386161097213" />
+      <entry key="H4" value="206.29501543352657" />
+      <entry key="D1" value="1411.256217681461" />
+      <entry key="W1" value="3147.5295132827077" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="2.884797205307185E-273" />
-      <entry key="S30" value="1.4235468441195856E-91" />
-      <entry key="S60" value="3.772992907064543E-46" />
-      <entry key="M2" value="1.943918412211452E-23" />
-      <entry key="M5" value="9.288908148123167E-10" />
-      <entry key="M10" value="5.3384091486327576E-5" />
-      <entry key="M15" value="0.002665817945379009" />
-      <entry key="M30" value="0.22910518718973533" />
-      <entry key="H1" value="3.646977527012399" />
-      <entry key="H2" value="21.31007246599994" />
-      <entry key="H4" value="82.41468400041774" />
-      <entry key="D1" value="686.6458230399791" />
-      <entry key="W1" value="1291.35142912161" />
+      <entry key="S5" value="1.6290623357510043E-272" />
+      <entry key="S10" value="1.2763472701635058E-136" />
+      <entry key="S30" value="5.0438360604202924E-46" />
+      <entry key="S60" value="2.3384613649686542E-23" />
+      <entry key="M2" value="5.709593657785305E-12" />
+      <entry key="M5" value="4.529429014517731E-5" />
+      <entry key="M10" value="0.009992104843278235" />
+      <entry key="M15" value="0.06874031315876077" />
+      <entry key="M30" value="0.662993185277928" />
+      <entry key="H1" value="2.9904828688146923" />
+      <entry key="H2" value="11.690557932539544" />
+      <entry key="H4" value="51.22471832835517" />
+      <entry key="D1" value="626.6322623244649" />
+      <entry key="W1" value="1286.0720682610965" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.059954007457829014" />
-      <entry key="MS500" value="0.5695916886110575" />
-      <entry key="S2" value="0.8687421851506233" />
-      <entry key="S5" value="0.9452710652724057" />
-      <entry key="S10" value="0.972250515696652" />
-      <entry key="S30" value="0.9906632686551361" />
-      <entry key="S60" value="0.9953207019974891" />
-      <entry key="M2" value="0.9977827320338118" />
-      <entry key="M5" value="1.0265473102422862" />
-      <entry key="M10" value="1.1770325147897034" />
-      <entry key="M15" value="1.4621251064794087" />
-      <entry key="M30" value="4.581647195654672" />
-      <entry key="H1" value="22.86668143785691" />
-      <entry key="H2" value="92.7462236949214" />
-      <entry key="H4" value="290.767464329404" />
-      <entry key="D1" value="2112.053728634701" />
-      <entry key="W1" value="4339.136186266849" />
+      <entry key="MS100" value="0.9265880618903709" />
+      <entry key="MS500" value="0.9848664428955506" />
+      <entry key="S2" value="0.9961949481330542" />
+      <entry key="S5" value="0.9984762383082793" />
+      <entry key="S10" value="0.9992378287036833" />
+      <entry key="S30" value="1.0000677364717747" />
+      <entry key="S60" value="1.036005108618946" />
+      <entry key="M2" value="1.41078856005866" />
+      <entry key="M5" value="3.190117749035708" />
+      <entry key="M10" value="5.675961558084731" />
+      <entry key="M15" value="8.232826595371757" />
+      <entry key="M30" value="18.52261547043697" />
+      <entry key="H1" value="43.89449418278096" />
+      <entry key="H2" value="101.22766613323627" />
+      <entry key="H4" value="257.50934690445547" />
+      <entry key="D1" value="2037.8692583982775" />
+      <entry key="W1" value="4433.595625436344" />
     </decayedShown>
   </component>
   <component name="PackageJsonUpdateNotifier">
@@ -183,6 +172,122 @@
       <recent name="C:\Users\maxim\Downloads\englishzinho\backend" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Autodetect">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="englishzinho" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -230,15 +335,55 @@
       <option name="project" value="LOCAL" />
       <updated>1789995171986</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Adicionado novas funcionalidades">
+      <option name="closed" value="true" />
+      <created>1790030519820</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1790030519820</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="fa82e47c-790c-4db9-acea-aa834aaec116" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="fa82e47c-790c-4db9-acea-aa834aaec116">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="updade" />
     <MESSAGE value="Adicionado novas funcionalidades" />
     <option name="LAST_COMMIT_MESSAGE" value="Adicionado novas funcionalidades" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/app/models/usuario.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

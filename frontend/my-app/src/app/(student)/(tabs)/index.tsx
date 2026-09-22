@@ -1,64 +1,49 @@
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {ScrollView, StyleSheet, Text, View, ActivityIndicator} from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import TreeButton from "../../../componets/TreeButton";
-import {router} from "expo-router";
+import {router, useFocusEffect} from "expo-router";
+
+import {listarAtividades} from '../../../services/api';
+import {useCallback, useState} from 'react';
+
+type AtividadeType = {
+    id: number;
+    title: string;
+    description: string;
+    type: 'Quiz' | 'Escuta' | 'Fala';
+    level: string;
+    created_at: string;
+};
 
 export default function Home() {
-    const atividades = [
-        {
-            id: '1',
-            title: 'Vocabulario basico Quiz',
-            type: 'Quiz',
-            level: 'Iniciante',
-            date: '12/02/2025',
-            description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-            completed: '0/0 completo',
-            icon: "bars",
-        },
-        {
-            id: '2',
-            title: 'Pratica Pronuncia Fala',
-            type: 'Fala',
-            level: 'Iniciante',
-            date: '12/02/2025',
-            description: 'Pratique falar frases comuns em inglês com pronúncia correta...',
-            completed: '0/0 completo',
-            icon: "audio",
-        },
 
-        {
-            id: '3',
-            title: 'Vocabulario basico Escuta',
-            type: 'Escuta',
-            level: 'Iniciante',
-            date: '12/02/2025',
-            description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
+    const [atividades, setAtividades] = useState<AtividadeType[]>([]);
+    const [carregando, setCarregando] = useState(true);
 
-            completed: '0/0 completo',
-            icon: "sound",
-        },
-        {
-            id: '4',
-            title: 'Vocabulario basico Escuta',
-            type: 'Escuta',
-            level: 'Iniciante',
-            date: '12/02/2025',
-            description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
+    const carregarAtividades = useCallback(async () => {
+        try {
+            setCarregando(true);
 
-            completed: '0/0 completo',
-            icon: "sound",
-        },
-         {
-            id: '5',
-            title: 'Pratica Pronuncia Fala',
-            type: 'Fala',
-            level: 'Iniciante',
-            date: '12/02/2025',
-            description: 'Pratique falar frases comuns em inglês com pronúncia correta...',
-            completed: '0/0 completo',
-            icon: "audio",
-        },
-    ]
+            const dados = await listarAtividades();
+            setAtividades(dados);
+        } catch (error) {
+            console.log('Erro ao buscar atividades:', error);
+        } finally {
+            setCarregando(false);
+        }
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarAtividades();
+        }, [carregarAtividades]),
+    );
+
+    function iconePorTipo(tipo: AtividadeType['type']) {
+        if (tipo === 'Quiz') return 'bars';
+        if (tipo === 'Fala') return 'audio';
+        return 'sound';
+    }
 
     const formatIconName = (name: any) => {
         if (!name) return 'question';
@@ -111,29 +96,63 @@ export default function Home() {
                             você</Text>
                     </View>
                     <View style={styles.mainCard2}>
-                        {
-                            atividades.map((atividade, index) => (
+                        {carregando ? (
+                            <ActivityIndicator size="large" color="#2563EB"/>
+                        ) : atividades.length === 0 ? (
+                            <Text style={styles.card2Description}>
+                                Nenhuma atividade disponível.
+                            </Text>
+                        ) : (
+                            atividades.map((atividade) => (
                                 <View key={atividade.id} style={styles.card2}>
                                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                                        <AntDesign style={styles.cardIcon} name={formatIconName(atividade.icon)}
-                                                   size={24} color="#F97316"/>
-                                        <View>
+                                        <AntDesign
+                                            style={styles.cardIcon}
+                                            name={iconePorTipo(atividade.type)}
+                                            size={24}
+                                            color="#F97316"
+                                        />
+
+                                        <View style={{ flexShrink: 1,}}>
                                             <Text style={styles.card2Title}>{atividade.title}</Text>
-                                            <Text style={styles.card2Title}>{atividade.type} • {atividade.level}</Text>
+
+                                            <Text style={styles.card2Title}>
+                                                {atividade.type} • {atividade.level}
+                                            </Text>
                                         </View>
                                     </View>
 
                                     <View style={{gap: 10}}>
-                                         <Text style={styles.card2Description}>{atividade.description}</Text>
-                                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                                            <Text>{atividade.date}</Text>
-                                            <TreeButton  onPress={() => router.push('/(student)/atividade')}/>
+                                        <Text style={styles.card2Description}>
+                                            {atividade.description}
+                                        </Text>
+
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Text>
+                                                {new Date(atividade.created_at).toLocaleDateString('pt-BR')}
+                                            </Text>
+
+                                            <TreeButton
+                                                onPress={() =>
+                                                    router.push({
+                                                        pathname: '/(student)/atividade',
+                                                        params: {
+                                                            atividadeId: String(atividade.id),
+                                                        },
+                                                    })
+                                                }
+                                            />
                                         </View>
                                     </View>
-
                                 </View>
                             ))
-                        }
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -198,7 +217,7 @@ const styles = StyleSheet.create({
     card2Title: {
         fontSize: 15,
         fontFamily: 'Inter_400Regular',
-        color: '#374151'
+        color: '#374151',
     },
     card2SubTitle: {
         fontSize: 10,

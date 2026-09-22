@@ -1,19 +1,33 @@
-import React, { useState} from 'react';
-import {Alert, Pressable, ScrollView, StyleSheet, Text, View,} from 'react-native';
-import AntDesign from "@expo/vector-icons/AntDesign";
+import React, {useEffect, useState} from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import {Checkbox, Host} from '@expo/ui/jetpack-compose';
 
+import {router, useLocalSearchParams} from 'expo-router';
+import {buscarAtividade, concluirProgresso} from '../../../services/api';
+
 export type Answer = {
-    id: string;
+    id: number;
     text: string;
     correct: boolean;
 };
+
 export type Question = {
-    id: string;
+    id: number;
     text: string;
     answers: Answer[];
 };
+
 export type ActivityData = {
     title: string;
     description: string;
@@ -22,92 +36,139 @@ export type ActivityData = {
     questions: Question[];
 };
 
-type Props = {
-    activity?: ActivityData;
-    onBack?: () => void;
-    onFinish?: (result: { selectedAnswers: Record<string, string>; score: number }) => void;
-};
-
-const demoActivity: ActivityData = {
-    title: 'Vocabulário basico Quiz',
-    description: 'Teste seu conhecimento de palavras comuns em inglês usadas no dia a dia...',
-    type: 'Quiz',
-    level: 'Iniciante',
-    questions: [
-        {
-            id: 'q1',
-            text: 'What is the opposite of “big”?',
-            answers: [
-                {id: 'a1', text: 'small', correct: true},
-                {id: 'a2', text: 'warm', correct: false},
-                {id: 'a3', text: 'cool', correct: false},
-                {id: 'a4', text: 'mild', correct: false},
-            ],
-        },
-        {
-            id: 'q2',
-            text: 'What is the opposite of “hot”?',
-            answers: [
-                {id: 'b1', text: 'cold', correct: true},
-                {id: 'b2', text: 'warm', correct: false},
-                {id: 'b3', text: 'cool', correct: false},
-                {id: 'b4', text: 'mild', correct: false},
-            ],
-        },
-        {
-            id: 'q3',
-            text: 'What is the opposite of “happy”?',
-            answers: [
-                {id: 'c1', text: 'cold', correct: false},
-                {id: 'c2', text: 'warm', correct: false},
-                {id: 'c3', text: 'sad', correct: true},
-                {id: 'c4', text: 'mild', correct: false},
-            ],
-        },
-    ],
-};
 
 /** Tela que o aluno usa para responder a atividade criada pelo professor. */
-export default function QuizAluno({activity = demoActivity, onBack, onFinish}: Props) {
-    const questions = activity.questions;
+export default function QuizAluno() {
+
+
+    const {atividadeId} = useLocalSearchParams<{
+        atividadeId: string;
+    }>();
+
+    const [activity, setActivity] = useState<ActivityData | null>(null);
+    const [carregando, setCarregando] = useState(true);
+    const [selectedAnswers, setSelectedAnswers] = useState<
+        Record<number, number | undefined>
+    >({});
     const [index, setIndex] = useState(0);
-    const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
+    const [alunoId, setAlunoId] = useState<number | null>(null);
 
-    const question = questions[index];
-    const isLastQuestion = index === questions.length - 1;
-    const progress = questions.length ? ((index + 1) / questions.length) * 100 : 0;
-    const currentSelection = question ? selectedAnswers[question.id] : undefined;
+    useEffect(() => {
+        async function carregarAluno() {
+            const usuarioSalvo = await AsyncStorage.getItem('@usuario');
 
-    function finishQuiz() {
-        const correctAnswers = questions.filter((item) => {
-            const chosenId = selectedAnswers[item.id];
-            return item.answers.some((answer) => answer.id === chosenId && answer.correct);
-        }).length;
-
-        const score = questions.length ? Math.round((correctAnswers / questions.length) * 100) : 0;
-        if (onFinish) {
-            onFinish({selectedAnswers, score});
-            return;
+            if (usuarioSalvo) {
+                const usuario = JSON.parse(usuarioSalvo);
+                setAlunoId(usuario.id_aluno);
+            }
         }
-        Alert.alert('Atividade concluída', `Você acertou ${correctAnswers} de ${questions.length} questões (${score}%).`);
+
+        carregarAluno();
+    }, []);
+
+    useEffect(() => {
+        async function carregarAtividade() {
+            try {
+                const dados = await buscarAtividade(Number(atividadeId));
+                setActivity(dados);
+            } catch (error) {
+                Alert.alert('Erro', 'Não foi possível carregar a atividade.');
+            } finally {
+                setCarregando(false);
+            }
+        }
+
+        carregarAtividade();
+    }, [atividadeId]);
+
+    if (carregando) {
+        return <ActivityIndicator size="large" color="#2563EB"/>;
     }
 
-    function goForward() {
-        if (!currentSelection) {
-            Alert.alert('Escolha uma alternativa', 'Selecione uma resposta antes de continuar.');
+    if (!activity) {
+        return (
+            <View style={styles.screen}>
+                <Text style={styles.empty}>Atividade não encontrada.</Text>
+            </View>
+        );
+    }
+
+    const questions = activity.questions;
+    const question = questions[index];
+
+    const isLastQuestion = index === questions.length - 1;
+
+    const progress = questions.length
+        ? ((index + 1) / questions.length) * 100
+        : 0;
+
+    const currentSelection = question
+        ? selectedAnswers[question.id]
+        : undefined;
+
+    async function finishQuiz() {
+        if (!alunoId) {
+            Alert.alert(
+                'Erro',
+                'Aluno não identificado. Faça login novamente.',
+            );
             return;
         }
-        if (isLastQuestion) {
-            finishQuiz();
-        } else {
-            setIndex((value) => value + 1);
+
+        try {
+            await concluirProgresso(alunoId, Number(atividadeId));
+
+            const correctAnswers = atividade.questions.reduce(
+                (total, question) => {
+                    const answerId = selectedAnswers[question.id];
+
+                    const answer = question.answers.find(
+                        (item) => item.id === answerId,
+                    );
+
+                    return total + (answer?.correct ? 1 : 0);
+                },
+                0,
+            );
+
+            Alert.alert(
+                'Atividade concluída!',
+                `Você acertou ${correctAnswers} de ${atividade.questions.length} questões.`,
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => router.replace('/(student)/(tabs)/progress'),
+                    },
+                ],
+            );
+        } catch (error) {
+            Alert.alert('Erro', 'Não foi possível concluir a atividade.');
         }
+    }
+
+    async function goForward() {
+        if (!currentSelection) {
+            Alert.alert(
+                'Escolha uma alternativa',
+                'Selecione uma resposta antes de continuar.',
+            );
+            return;
+        }
+
+        if (isLastQuestion) {
+            await finishQuiz();
+            return;
+        }
+
+        setIndex((value) => value + 1);
     }
 
     if (!question) {
         return (
             <View style={styles.screen}>
-                <Text style={styles.empty}>Esta atividade ainda não possui questões.</Text>
+                <Text style={styles.empty}>
+                    Esta atividade ainda não possui questões.
+                </Text>
             </View>
         );
     }
@@ -145,29 +206,31 @@ export default function QuizAluno({activity = demoActivity, onBack, onFinish}: P
                 <View style={styles.questionCard}>
                     <Text style={styles.questionText}>{question.text}</Text>
                     <View style={{gap: 10}}>
-                        {question.answers.map((answer) => {
-                            const isSelected = currentSelection === answer.id;
-                            return (
-                                <View key={answer.id} style={styles.opcoesCard}>
-                                    <Host matchContents>
-                                        <Checkbox
-                                            value={isSelected}
-                                            onCheckedChange={(checked) =>
-                                                setSelectedAnswers((value) => ({
-                                                    ...value,
-                                                    [question.id]: checked ? answer.id : '',
-                                                }))
-                                            }
-                                            colors={{
-                                                checkedColor: '#2563EB',
-                                                checkmarkColor: '#fbfbfb',
-                                            }}
-                                        />
-                                    </Host>
-                                    <Text style={styles.VeiwTitle}>{answer.text}</Text>
-                                </View>
-                            );
-                        })}
+                        {
+                            question.answers.map((answer) => {
+                                const isSelected = currentSelection === answer.id;
+                                return (
+                                    <View key={answer.id} style={styles.opcoesCard}>
+                                        <Host matchContents>
+                                            <Checkbox
+                                                value={isSelected}
+                                                onCheckedChange={(checked) =>
+                                                    setSelectedAnswers((previous) => ({
+                                                        ...previous,
+                                                        [question.id]: checked ? answer.id : undefined,
+                                                    }))
+                                                }
+                                                colors={{
+                                                    checkedColor: '#2563EB',
+                                                    checkmarkColor: '#fbfbfb',
+                                                }}
+                                            />
+                                        </Host>
+                                        <Text style={styles.VeiwTitle}>{answer.text}</Text>
+                                    </View>
+                                );
+                            })
+                        }
                     </View>
                 </View>
 
@@ -189,13 +252,14 @@ export default function QuizAluno({activity = demoActivity, onBack, onFinish}: P
                         onPress={goForward}
                     >
                         <Text style={styles.nextButtonText}>{isLastQuestion ? 'Complete' : 'Próximo'}</Text>
-                        <Feather name="arrow-right" size={24} color="#fff" />
+                        <Feather name="arrow-right" size={24} color="#fff"/>
                     </Pressable>
                 </View>
             </View>
         </View>
     );
 }
+
 function Tag({label}: { label: string }) {
     return (
         <View style={styles.tag}>
@@ -203,6 +267,7 @@ function Tag({label}: { label: string }) {
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
@@ -374,7 +439,7 @@ const styles = StyleSheet.create({
     buttonHidden: {
         opacity: 0,
     },
-    empty:{
+    empty: {
         padding: 15,
         textAlign: 'center',
     }

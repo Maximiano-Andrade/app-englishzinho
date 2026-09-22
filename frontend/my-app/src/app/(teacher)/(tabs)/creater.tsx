@@ -180,7 +180,7 @@ export default function Creater() {
                 <StepIndicator step={3} currentStep={currentStep} label="Resumo"/>
             </View>
 
-            <ScrollView contentContainerStyle={styles.content}>
+            <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
                 {currentStep === 1 && (
                     <StepBasicInfo
                         formData={formData}
@@ -211,11 +211,7 @@ export default function Creater() {
 }
 
 
-function StepIndicator({
-                           step,
-                           currentStep,
-                           label,
-                       }: {
+function StepIndicator({step, currentStep,label,}: {
     step: number;
     currentStep: number;
     label: string;

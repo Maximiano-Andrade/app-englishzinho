@@ -8,6 +8,10 @@ from app.models.video import Video
 from app.models.atividade import Atividade
 from app.models.questao import Question
 from app.models.answer import Answer
+from datetime import datetime
+from app.models.progressoAtividade import ProgressoAtividade, StatusAtividade
+
+from sqlalchemy.orm import Session, selectinload
 
 
 def criar_usuario_db(db: Session, usuario_in: UsuarioCreate):
@@ -116,6 +120,64 @@ def cria_atividade(db: Session, atividade_in: AtividadeCreate):
 
 def get_atividades(db: Session):
     return db.query(Atividade).order_by(Atividade.id.desc()).all()
+
+
+def get_atividade(db: Session, atividade_id: int):
+    atividade = (
+        db.query(Atividade).options(
+            selectinload(Atividade.questions)
+            .selectinload(Question.answers)
+        )
+        .filter(Atividade.id == atividade_id)
+        .first()
+    )
+
+    return atividade
+
+
+def get_progresso_atividade(
+        db: Session,
+        aluno_id: int,
+):
+    return (
+        db.query(ProgressoAtividade)
+        .filter(ProgressoAtividade.aluno_id == aluno_id)
+        .all()
+    )
+
+
+def concluir_progresso(
+        db: Session,
+        aluno_id: int,
+        atividade_id: int,
+):
+    progresso = (
+        db.query(ProgressoAtividade)
+        .filter(
+            ProgressoAtividade.aluno_id == aluno_id,
+            ProgressoAtividade.atividade_id == atividade_id,
+        )
+        .first()
+    )
+
+    if not progresso:
+        progresso = ProgressoAtividade(
+            aluno_id=aluno_id,
+            atividade_id=atividade_id,
+            status=StatusAtividade.CONCLUIDA,
+            completed_at=datetime.now(),
+        )
+
+        db.add(progresso)
+
+    else:
+        progresso.status = StatusAtividade.CONCLUIDA
+        progresso.completed_at = datetime.now()
+
+    db.commit()
+    db.refresh(progresso)
+
+    return progresso
 
 
 def get_atividades_por_professor(
