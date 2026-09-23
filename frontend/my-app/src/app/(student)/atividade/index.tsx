@@ -107,6 +107,14 @@ export default function QuizAluno() {
         : undefined;
 
     async function finishQuiz() {
+        const atividadeAtual = activity;
+
+
+        if (!atividadeAtual) {
+            Alert.alert('Erro', 'Atividade não encontrada.');
+            return;
+        }
+
         if (!alunoId) {
             Alert.alert(
                 'Erro',
@@ -118,7 +126,7 @@ export default function QuizAluno() {
         try {
             await concluirProgresso(alunoId, Number(atividadeId));
 
-            const correctAnswers = atividade.questions.reduce(
+            const correctAnswers = activity.questions.reduce(
                 (total, question) => {
                     const answerId = selectedAnswers[question.id];
 
@@ -133,16 +141,24 @@ export default function QuizAluno() {
 
             Alert.alert(
                 'Atividade concluída!',
-                `Você acertou ${correctAnswers} de ${atividade.questions.length} questões.`,
+                `Você acertou ${correctAnswers} de ${activity.questions.length} questões.`,
                 [
                     {
                         text: 'OK',
-                        onPress: () => router.replace('/(student)/(tabs)/progress'),
+                        onPress: () =>
+                            router.replace('/(student)/(tabs)/progress'),
                     },
                 ],
             );
         } catch (error) {
-            Alert.alert('Erro', 'Não foi possível concluir a atividade.');
+            console.log('Erro ao concluir progresso:', error);
+
+            Alert.alert(
+                'Erro ao concluir',
+                error instanceof Error
+                    ? error.message
+                    : 'Não foi possível concluir a atividade.',
+            );
         }
     }
 

@@ -1,4 +1,4 @@
-const API_URL = 'http://172.27.176.1:8000';
+const API_URL = 'http://172.25.64.1:8000';
 // Expo Go no celular: use o IPv4 do computador.
 // Android Emulator: http://10.0.2.2:8000
 
